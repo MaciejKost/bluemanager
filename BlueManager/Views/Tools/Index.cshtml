@@ -1,0 +1,51 @@
+﻿@model IEnumerable<BlueManagerPlatform.Models.Tool>
+
+@{
+    ViewBag.Title = "Narzędzia";
+}
+<h2>Narzędzia</h2>
+
+<p>
+    <a asp-action="Create">Nowy</a>
+</p>
+@using (Html.BeginForm())
+{
+<p>
+    Przeszukaj po nazwie: @Html.TextBox("SearchString")
+    <input type="submit" value="Search" /> ||  @Html.ActionLink("Wróć", "Index", new { searchString = "" })
+</p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink("Nazwa narzędzia", "Index", new { sortOrder = ViewBag.NameSortParm })
+                @*@Html.DisplayNameFor(model => model.ObjName)*@
+            </th>
+            <th>
+                Adres MAC
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ObjName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MacAddress)
+                </td>
+                <td>
+                    @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Szczegóły", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Usuń", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

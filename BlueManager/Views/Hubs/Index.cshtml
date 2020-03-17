@@ -1,0 +1,52 @@
+﻿@model IEnumerable<BlueManagerPlatform.Models.Hub>
+
+@{
+    ViewData["Title"] = "Koncentratory";
+}
+
+<h2>Koncentratory</h2>
+
+<p>
+    <a asp-action="Create">Nowy</a>
+</p>
+@using (Html.BeginForm())
+{
+    <p>
+        Przeszukaj po nazwie: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" /> ||  @Html.ActionLink("Wróć", "Index", new { searchString = "" })
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.IpAddress)*@
+                @Html.ActionLink("Nazwa", "Index", new { sortOrder = ViewBag.IpSortParm })
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.LocationName)*@
+                @Html.ActionLink("Lokalizacja", "Index", new { sortOrder = ViewBag.LocationSortParm })
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IpAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LocationName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edytuj</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Szczegóły</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

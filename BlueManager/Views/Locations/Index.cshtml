@@ -1,0 +1,66 @@
+﻿
+@model List<BlueManagerPlatform.Models.Tool>
+
+@{
+    ViewBag.Title = "Lokalizacja";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<meta http-equiv="refresh" content="5">*@
+<h2>Lokalizacja</h2>
+
+<p>
+    @Html.ActionLink("Odśwież", "Index")
+</p>
+
+@using (Html.BeginForm())
+{
+<p>
+    Przeszukaj po nazwie: @Html.TextBox("SearchString")
+    <input type="submit" value="Search" /> ||  @Html.ActionLink("Wróć", "Index", new { searchString = "" })
+</p>
+}
+@*<div style="height: 200px; overflow: auto;">*@
+<div style="height: 400px; overflow: auto;">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("Nazwa", "Index", new { sortOrder = ViewBag.NameSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Nazwa urządzenia", "Index", new { sortOrder = ViewBag.ObjNameSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Lokalizacja", "Index", new { sortOrder = ViewBag.LocationSortParm })
+            </th>
+            <th>
+                MAC
+            </th>
+            <th>
+                @Html.ActionLink("Czas", "Index", new { sortOrder = ViewBag.TimeSortParm })
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ObjName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MacAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
