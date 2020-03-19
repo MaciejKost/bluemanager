@@ -1,22 +1,26 @@
-﻿@{
+﻿@model BlueManager.Models.LoginViewModel
+
+@{
     ViewData["Title"] = "Logowanie";
 }
 
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <h2><strong>Logowanie </strong></h2><br />
+            <h2><strong>Logowanie </strong></h2><br/>
             <form asp-action="login" method="post">
                 <div class="form-group">
-                    <label>Użytkownik</label>
-                    <input type="text" class="form-control" id="Użykownik" name="userName" placeholder="Użytkownik">
+                    @Html.LabelFor(x=>x.Username)
+                    @Html.TextBoxFor(x=>x.Username, new {@class="form-control"})
+                    @Html.ValidationMessageFor(x=>x.Username, string.Empty, new {@class="invalid-feedback d-block"})
                 </div>
                 <div class="form-group">
-                    <label>Hasło</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Hasło">
+                    @Html.LabelFor(x=>x.Password)
+                    @Html.PasswordFor(x=>x.Password, new {@class="form-control"})
+                    @Html.ValidationMessageFor(x=>x.Password, null, new {@class="invalid-feedback d-block"})
                 </div>
                 <div class="col-md-12">
-                    @ViewBag.Error
+                    @Html.ValidationSummary(true, string.Empty, new {@class = "invalid-feedback d-block"})
                 </div>
                 <div class="form-check">
                     @*<button class="btn btn-info" type="reset">Reset</button>*@

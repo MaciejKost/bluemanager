@@ -30,7 +30,4 @@
     <None Include="wwwroot\img\database_red.png" />
     <None Include="wwwroot\img\database_green.png" />
   </ItemGroup>
-
-
-
 </Project>
