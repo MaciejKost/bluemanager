@@ -89,7 +89,7 @@ namespace BlueManager.Services
                                         }
                                     }
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     Console.WriteLine("Problem z połączeniem z serwerem od adresie: " + hub.IpAddress);
                                 }
