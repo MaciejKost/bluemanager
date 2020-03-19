@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Diagnostics.HealthChecks;
+@inject HealthCheckService HealthCheckService;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,10 +9,16 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
+@{
+        var health = await HealthCheckService.CheckHealthAsync();
+        var bg = health.Status == HealthStatus.Unhealthy ? "background-color: red;"
+            : health.Status == HealthStatus.Degraded ? "backgroung-color: orange;" : "";
+
+}
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+            <div class="container" style="@bg">
                 @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlueManager</a>*@
                 <a class="navbar-brand" asp-area="" asp-controller="Locations" asp-action="Index">BlueManager</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"

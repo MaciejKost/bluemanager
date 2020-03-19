@@ -29,6 +29,7 @@ using BlueManagerPlatform.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
+
 namespace BlueManager.Services
 {
     public class SearchingDevicesService : BackgroundService
@@ -42,14 +43,16 @@ namespace BlueManager.Services
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                using (var scope = _scopeFactory.CreateScope())
+                try
                 {
-                    var _context = scope.ServiceProvider.GetRequiredService<BlueManagerContext>();
 
-                    Console.WriteLine("[SearchingDevicesService] Service is Running" + DateTime.Now.ToString());
-      
-                    try
+                    using (var scope = _scopeFactory.CreateScope())
                     {
+                        var _context = scope.ServiceProvider.GetRequiredService<BlueManagerContext>();
+
+                        Console.WriteLine("[SearchingDevicesService] Service is Running" + DateTime.Now.ToString());
+
+
                         using (_context)
                         {
                             List<Tool> tools = new List<Tool>();
@@ -88,21 +91,20 @@ namespace BlueManager.Services
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine("Problem z połączeniem z serwerem od adresie: "+ hub.IpAddress);
+                                    Console.WriteLine("Problem z połączeniem z serwerem od adresie: " + hub.IpAddress);
                                 }
 
                             }
 
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+                        // Run something
 
-                    // Run something
-
-                    await Task.Delay(5000, stoppingToken);
+                        await Task.Delay(5000, stoppingToken);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             }
         }

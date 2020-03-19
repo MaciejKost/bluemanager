@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Server.IISIntegration;
+using System.IO;
+using Microsoft.AspNetCore;
 
 namespace BlueManager
 {
@@ -23,22 +26,7 @@ namespace BlueManager
                  })
                .ConfigureServices((hostContext, services) =>
                {
-                   // #region snippet3
-                   //  services.AddSingleton<MonitorLoop>();
                    services.AddSingleton<IHostedService, SearchingDevicesService>();
-                   //     services.AddHostedService<QueuedHostedService>();
-                   //      services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
-                   //  #endregion
-
-                   // #region snippet1
-                   //services.AddHostedService<TimedHostedService>();
-                   //  #endregion
-
-                   #region snippet2
-                   // services.AddHostedService<ConsumeScopedServiceHostedService>();
-                   //     services.AddScoped<BlueManagerContext>();
-                   // services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
-                   #endregion
                })
                 .Build())
             {
@@ -48,9 +36,10 @@ namespace BlueManager
                 // Wait for the host to shutdown
                 await host.WaitForShutdownAsync();
             }
-
-
         }
+
+        //public static IWebHost BuildWebHost(string[] args) =>
+        //    WebHost.CreateDefaultBuilder
     }
 }
 

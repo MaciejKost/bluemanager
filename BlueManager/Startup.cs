@@ -14,6 +14,11 @@ using BlueManager.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System.Text;
+using Newtonsoft.Json;
+using HealthChecks.UI.Client;
 
 namespace BlueManager
 {
@@ -45,6 +50,11 @@ namespace BlueManager
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
 
+
+            services.AddHealthChecks()
+                .AddSqlServer(Configuration["ConnectionStrings:BlueManagerContext"]);
+            services.AddHealthChecksUI();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,13 +75,22 @@ namespace BlueManager
 
             app.UseRouting();
 
-           // app.UseCookiePolicy();
-           // app.UseAuthorization();
+            // app.UseCookiePolicy();
+            // app.UseAuthorization();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //  app.UseHealthChecks("/hc");
 
+            app.UseHealthChecks("/health", new HealthCheckOptions()
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            app.UseHealthChecksUI();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
