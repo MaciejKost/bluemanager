@@ -24,10 +24,6 @@ namespace BlueManager
                  {
                      webBuilder.UseStartup<Startup>();
                  })
-               .ConfigureServices((hostContext, services) =>
-               {
-                   services.AddSingleton<IHostedService, SearchingDevicesService>();
-               })
                 .Build())
             {
                 // Start the host
