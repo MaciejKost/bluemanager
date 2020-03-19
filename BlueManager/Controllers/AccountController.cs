@@ -35,40 +35,7 @@ namespace BlueManagerCore.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult Verify(Account acc)
-        {
-            using (var con = new SqlConnection(_configuration.GetConnectionString("BlueManagerContext")))
-            // using (var con = new SqlConnection(cs))
-            {
-                try
-                {
-                    con.Open();
-                    cmd.Connection = con;
-                    cmd.CommandText = "SELECT * FROM login WHERE username=@username AND password=@password";
-                    cmd.Parameters.Add(new SqlParameter("@username", acc.Name));
-                    cmd.Parameters.Add(new SqlParameter("@password", acc.Password));
-                    dr = cmd.ExecuteReader();
 
-                    if (dr.Read())
-                    {
-                        // FormsAuthentication.SetAuthCookie((string)dr["username"], false);
-                        //return RedirectToAction("Index","Home", null);
-                        return View("../Home/Index");
-                    }
-                    else
-                    {
-                        return View("../Shared/Error");
-                    }
-                }
-                finally
-                {
-                    con.Close();
-                }
-
-            }
-
-        }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel login)
