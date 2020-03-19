@@ -30,12 +30,12 @@ namespace BlueManager.Controllers
             ViewBag.ObjNameSortParm = sortOrder == "name" ? "name_desc" : "name";
             ViewBag.LocationSortParm = sortOrder == "location" ? "location_desc" : "location";
             ViewBag.TimeSortParm = sortOrder == "time" ? "time_desc" : "time";
-            var tools = from t in _context.Tools
-                        select t;
+
+            var tools = _context.Tools.AsQueryable();
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                tools = tools.Where(t => t.ObjName.Contains(searchString));
+                tools = tools.Where(t => t.ObjName != null && t.ObjName.Contains(searchString));
             }
 
             switch (sortOrder)
@@ -66,7 +66,9 @@ namespace BlueManager.Controllers
                     break;
             }
 
-            return View(await tools.ToListAsync());
+            var toolsList = await tools.ToListAsync();
+
+            return View(toolsList);
         }
 
         // GET: Tools/Details/5
@@ -93,7 +95,7 @@ namespace BlueManager.Controllers
         }
 
         // POST: Tools/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,7 +111,7 @@ namespace BlueManager.Controllers
                 }
                 else
                 {
-                    ViewBag.Error = "";                  
+                    ViewBag.Error = "";
                     _context.Add(tool);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -135,7 +137,7 @@ namespace BlueManager.Controllers
         }
 
         // POST: Tools/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -154,7 +156,7 @@ namespace BlueManager.Controllers
                     if (CanEdit(tool))
                     {
                         ViewBag.Error = "Narzędzie o takim adresie MAC już istnieje";
-                        return View(tool);                   
+                        return View(tool);
                     }
                     else
                     {
@@ -162,7 +164,7 @@ namespace BlueManager.Controllers
                         _context.Update(tool);
                         await _context.SaveChangesAsync();
                     }
- 
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -235,7 +237,7 @@ namespace BlueManager.Controllers
                     _context.Entry(_tool).State = EntityState.Detached;
                     return true;
                 }
-            }  
+            }
             return false;
         }
 

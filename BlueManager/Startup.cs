@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Text;
+using BlueManager.Localization;
+using BlueManager.Localization.Resources;
 using Newtonsoft.Json;
 using HealthChecks.UI.Client;
 
@@ -47,8 +50,17 @@ namespace BlueManager
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddLocalization(options => options.ResourcesPath = "Localization/Resources");
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest)
+                .AddDataAnnotationsLocalization(options =>
+                {
+                    options.DataAnnotationLocalizerProvider = (type, factory) =>
+                    {
+                         var assemblyName = new AssemblyName(typeof(ValidationMessages).GetTypeInfo().Assembly.FullName);
+                        return factory.Create("ValidationMessages", assemblyName.Name);
+                    };
+                });
 
 
             services.AddHealthChecks()
@@ -90,7 +102,6 @@ namespace BlueManager
             });
 
             app.UseHealthChecksUI();
-            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {

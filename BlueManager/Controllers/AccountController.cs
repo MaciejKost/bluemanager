@@ -45,7 +45,9 @@ namespace BlueManagerCore.Controllers
                 {
                     con.Open();
                     cmd.Connection = con;
-                    cmd.CommandText = "SELECT * FROM login WHERE username='" + acc.Name + "'AND password='" + acc.Password + "'";
+                    cmd.CommandText = "SELECT * FROM login WHERE username=@username AND password=@password";
+                    cmd.Parameters.Add(new SqlParameter("@username", acc.Name));
+                    cmd.Parameters.Add(new SqlParameter("@password", acc.Password));
                     dr = cmd.ExecuteReader();
 
                     if (dr.Read())
@@ -69,15 +71,15 @@ namespace BlueManagerCore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string userName, string password)
+        public async Task<IActionResult> Login(LoginViewModel login)
         {
-            if (!string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(password))
+            if (!ModelState.IsValid)
             {
-                return RedirectToAction("Login");
+                return View();
             }
 
-            //Check the user name and password  
-            //Here can be implemented checking logic from the database  
+            //Check the user name and password
+            //Here can be implemented checking logic from the database
             ClaimsIdentity identity = null;
             bool isAuthenticated = false;
 
@@ -88,17 +90,19 @@ namespace BlueManagerCore.Controllers
                 {
                     con.Open();
                     cmd.Connection = con;
-                    //  cmd.CommandText = "SELECT * FROM login WHERE username='" + acc.Name + "'AND password='" + acc.Password + "'";
-                    cmd.CommandText = "SELECT * FROM login WHERE username='" + userName + "'AND password='" + password + "'";
+                    cmd.CommandText = "SELECT * FROM login WHERE username=@username AND password=@password";
+                    cmd.Parameters.Add(new SqlParameter("@username", login.Username));
+                    cmd.Parameters.Add(new SqlParameter("@password", login.Password));
+
                     dr = cmd.ExecuteReader();
 
                     //if (userName == "Admin" && password == "password")
                     if (dr.Read())
                     {
-
-                        //Create the identity for the user  
+                        var username = dr["username"].ToString();
+                        //Create the identity for the user
                         identity = new ClaimsIdentity(new[] {
-                                   new Claim(ClaimTypes.Name, userName),
+                                   new Claim(ClaimTypes.Name, username),
                                    new Claim(ClaimTypes.Role, "Admin")
                                    }, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -108,7 +112,7 @@ namespace BlueManagerCore.Controllers
 
                     //if (userName == "Mukesh" && password == "password")
                     //{
-                    //    //Create the identity for the user  
+                    //    //Create the identity for the user
                     //    identity = new ClaimsIdentity(new[] {
                     //        new Claim(ClaimTypes.Name, userName),
                     //        new Claim(ClaimTypes.Role, "User")
@@ -121,10 +125,13 @@ namespace BlueManagerCore.Controllers
                     {
                         var principal = new ClaimsPrincipal(identity);
 
-                        var login = HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                         return RedirectToAction("Index", "Home");
                     }
+
+                    ModelState.AddModelError(string.Empty, "Nieprawidłowe dane logowania");
+
                     return View();
 
                 }
