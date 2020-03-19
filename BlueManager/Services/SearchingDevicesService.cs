@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 using BlueManager.Data;
 using BlueManagerPlatform.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 
 
@@ -34,8 +35,11 @@ namespace BlueManager.Services
 {
     public class SearchingDevicesService : BackgroundService
     {
-        public SearchingDevicesService(IServiceScopeFactory scopeFactory) : base(scopeFactory)
+        private readonly IServiceScopeFactory _scopeFactory;
+
+        public SearchingDevicesService(IServiceScopeFactory scopeFactory)
         {
+            _scopeFactory = scopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -49,7 +53,7 @@ namespace BlueManager.Services
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var _context = scope.ServiceProvider.GetRequiredService<BlueManagerContext>();
-                      
+
                         Console.WriteLine("[SearchingDevicesService] Service is Running" + DateTime.Now.ToString());
 
 
@@ -99,12 +103,16 @@ namespace BlueManager.Services
                         }
                         // Run something
 
-                        await Task.Delay(5000, stoppingToken);
+
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    await Task.Delay(5000, stoppingToken);
                 }
             }
         }

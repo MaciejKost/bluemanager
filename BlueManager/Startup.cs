@@ -67,6 +67,8 @@ namespace BlueManager
                 .AddSqlServer(Configuration["ConnectionStrings:BlueManagerContext"]);
             services.AddHealthChecksUI();
 
+            services.AddSingleton<IHostedService, SearchingDevicesService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
