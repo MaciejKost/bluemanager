@@ -26,6 +26,11 @@
     <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\img\database_red.png" />
+    <None Include="wwwroot\img\database_green.png" />
+  </ItemGroup>
+
 
 
 </Project>

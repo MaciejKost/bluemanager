@@ -49,7 +49,7 @@ namespace BlueManager.Services
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var _context = scope.ServiceProvider.GetRequiredService<BlueManagerContext>();
-
+                      
                         Console.WriteLine("[SearchingDevicesService] Service is Running" + DateTime.Now.ToString());
 
 

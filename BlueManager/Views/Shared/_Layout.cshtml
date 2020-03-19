@@ -10,15 +10,13 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 @{
-        var health = await HealthCheckService.CheckHealthAsync();
-        var bg = health.Status == HealthStatus.Unhealthy ? "background-color: red;"
-            : health.Status == HealthStatus.Degraded ? "backgroung-color: orange;" : "";
-
+        var health = await HealthCheckService.CheckHealthAsync();     
+        var icon = health.Status == HealthStatus.Unhealthy ? "database_red.png" : "database_green.png";
 }
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container" style="@bg">
+            <div class="container">
                 @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlueManager</a>*@
                 <a class="navbar-brand" asp-area="" asp-controller="Locations" asp-action="Index">BlueManager</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -36,6 +34,11 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Hubs" asp-action="Index">Koncentratory</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action=""> 
+                                <img alt="Database Status" src="~/img/@icon">
+                            </a>
                         </li>
                     </ul>
                 </div>

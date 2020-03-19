@@ -7,6 +7,7 @@ using BlueManager.Data;
 using BlueManagerPlatform.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 
@@ -33,7 +34,7 @@ namespace BlueManager.Controllers
 
         public async Task<IActionResult> Index(string sortOrder, string searchString, CancellationToken cancellationToken = new CancellationToken())
         {
-            
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "time_desc" : "";
             ViewBag.NameSortParm = sortOrder == "obj_name" ? "obj_name_desc" : "obj_name";
