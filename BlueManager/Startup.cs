@@ -50,6 +50,8 @@ namespace BlueManager
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<ReportPollingConfiguration>(Configuration.GetSection(nameof(ReportPollingConfiguration)));
+
             services.AddLocalization(options => options.ResourcesPath = "Localization/Resources");
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest)
