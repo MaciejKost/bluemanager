@@ -19,13 +19,13 @@
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>*@
             <div class="form-group">
-                <label asp-for="ObjName" class="control-label"></label>
-                <input asp-for="ObjName" class="form-control" />
-                <span asp-validation-for="ObjName" class="text-danger"></span>
+                <label asp-for="ToolName" class="control-label"></label>
+                <input asp-for="ToolName" class="form-control" />
+                <span asp-validation-for="ToolName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MacAddress" class="control-label"></label>
-                <input asp-for="MacAddress" class="form-control" style="text-transform:uppercase;"/>
+                <input asp-for="MacAddress" class="form-control" style="text-transform:uppercase;" />
                 <span asp-validation-for="MacAddress" class="text-danger"></span>
             </div>
             @*<div class="form-group">
@@ -39,7 +39,7 @@
             <span asp-validation-for="Time" class="text-danger"></span>
         </div>*@
             <div class="col-md-12">
-                @ViewBag.Error
+                @Html.ValidationSummary(true, string.Empty, new { @class = "invalid-feedback d-block" })
             </div>
             <div class="form-group">
                 <input type="submit" value="Zapisz" class="btn btn-primary" />

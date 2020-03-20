@@ -73,16 +73,16 @@ namespace BlueManager.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                tools = tools.Where(t => t.ObjName.Contains(searchString));
+                tools = tools.Where(t => t.ToolName.Contains(searchString));
             }
 
             Func<Tool, IComparable> sortExpression = sortProperty switch
             {
-                "obj_name" => t => t.ObjName,
-                "name"     => t => t.Name,
-                "location" => t => t.Location,
-                "time"     => t => t.Time,
-                _          => t => t.ObjName
+                "obj_name" => t => t.ToolName,
+                //"name"     => t => t.Name,
+                //"location" => t => t.Location,
+                //"time"     => t => t.Time,
+                _          => t => t.ToolName
             };
 
             tools = descending

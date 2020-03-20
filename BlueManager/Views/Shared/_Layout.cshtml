@@ -8,7 +8,6 @@
     <title>@ViewData["Title"] - BlueManager</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/dataTables.bootstrap4.min.css" />
 </head>
 @{
@@ -61,25 +60,13 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
-    @*<script src="~/lib/bootstrap/dist/js/dataTables.bootstrap4.min.js"></script>*@
-    <script src="~/lib/bootstrap/dist/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 
 
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#example').DataTable({
-                aoColumnDefs: [
-                {"aTargets": [4], "bSortable": true},
-            ],
-                "language": {
-                    "sUrl": "lib/bootstrap/dist/js/Polish.json"
-                }
-            });
-        });
-    </script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

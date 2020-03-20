@@ -14,7 +14,7 @@ namespace BlueManager.Data
 
     public class BlueManagerContext : DbContext
     {
-        public BlueManagerContext (DbContextOptions<BlueManagerContext> options)
+        public BlueManagerContext(DbContextOptions<BlueManagerContext> options)
             : base(options)
         {
         }
@@ -22,5 +22,15 @@ namespace BlueManager.Data
         public DbSet<BlueManagerPlatform.Models.Hub> Hubs { get; set; }
 
         public DbSet<BlueManagerPlatform.Models.Tool> Tools { get; set; }
+        public DbSet<BlueManagerPlatform.Models.ToolAtHub> ToolAtHubs { get; set; }
+        public DbSet<BlueManagerPlatform.Models.ToolBatteryReadout> ToolBatteryReadouts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ToolAtHub>()
+                .HasNoKey();
+            modelBuilder.Entity<ToolBatteryReadout>()
+                .HasNoKey();
+        }
     }
 }

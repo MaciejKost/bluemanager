@@ -43,12 +43,13 @@ namespace BlueManager.Services
                         using (_context)
                         {
                             var hubs = await _context.Hubs.ToListAsync(stoppingToken);
-
+                          //  var tools = await _context.Tools.ToListAsync(stoppingToken);
+                            
                           var downloads = hubs.Select(async h =>
                             {
                                 using var wc = new WebClient();
                                 var report = await wc.DownloadStringTaskAsync($"http://{h.IpAddress}:8000/");
-                                return (h.LocationName, report);
+                                return (h.ID, report);
                             }).ToList();
 
                             await Task.WhenAll(downloads);
@@ -58,13 +59,19 @@ namespace BlueManager.Services
                                 var report = JsonConvert.DeserializeObject<HubReport>(reportTask.Result.report);
                                 foreach (var tool in report.Devices)
                                 {
-                                    var updateTool = await _context.Tools.Where(x => x.MacAddress == tool.MacAddress).FirstOrDefaultAsync(stoppingToken);
-                                    if (updateTool?.ObjName != null)
+                                    
+                                  var updateTool = await _context.Tools.Where(x => x.MacAddress == tool.MacAddress).FirstOrDefaultAsync(stoppingToken);
+                                    if (updateTool?.ToolName != null)
                                     {
-                                        updateTool.Location = reportTask.Result.LocationName;
-                                        updateTool.Time = tool.Timestamp.ToString("u");
-                                        updateTool.Name = tool.Name;
-                                        _context.Update(updateTool);
+                                        var toolAtHub = new ToolAtHub()
+                                        {
+                                            Tool = updateTool,
+                                            HubId = reportTask.Result.ID,
+                                            BleName = tool.Name,
+                                            Timestamp = tool.Timestamp
+                                        };
+
+                                        await _context.ToolAtHubs.AddAsync(toolAtHub,stoppingToken);
                                         _context.SaveChanges();
                                     }
                                 }

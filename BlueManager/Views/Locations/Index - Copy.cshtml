@@ -44,21 +44,21 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Name)
-                </td>
+                </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.ObjName)
+                    @Html.DisplayFor(modelItem => item.ToolName)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Location)
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.MacAddress)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Time)
-                </td>
+                </td>*@
             </tr>
         }
     </table>

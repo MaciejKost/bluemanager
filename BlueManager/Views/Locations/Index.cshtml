@@ -22,35 +22,62 @@
                 @foreach (var item in Model)
                 {
                 <tr>
-                    <td>
+                    @*<td>
                         @Html.DisplayFor(modelItem => item.Name)
-                    </td>
+                    </td>*@
                     <td>
-                        @Html.DisplayFor(modelItem => item.ObjName)
+                        @Html.DisplayFor(modelItem => item.ToolName)
                     </td>
+                    @*
                     <td>
                         @Html.DisplayFor(modelItem => item.Location)
-                    </td>
+                    </td>*@
                     <td>
                         @Html.DisplayFor(modelItem => item.MacAddress)
                     </td>
+                    @*
                     <td>
                         @Html.DisplayFor(modelItem => item.Time)
-                    </td>
+                    </td>*@
                 </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    <th>Nazwa</th>
+                    @*
+                    <th>Nazwa</th>*@
                     <th>Nazwa narzędzia</th>
-                    <th>Lokalizacja</th>
+                    @*
+                    <th>Lokalizacja</th>*@
                     <th>Adres MAC</th>
-                    <th>Czas</th>
+                    @*
+                    <th>Czas</th>*@
                 </tr>
             </tfoot>
         </table>
 
     </div>
 
- 
+    @section scripts {
+
+    
+    @*<script src="~/lib/bootstrap/dist/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap-table.min.js"></script>*@
+
+    <script src="~/lib/bootstrap/dist/js/jquery.dataTables.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                aoColumnDefs: [
+                    { "aTargets": [4], "bSortable": true },
+                ],
+                "language": {
+                    "sUrl": "lib/bootstrap/dist/js/Polish.json"
+                }
+            });
+        });
+    </script>
+
+    }

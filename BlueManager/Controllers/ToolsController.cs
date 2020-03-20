@@ -35,34 +35,34 @@ namespace BlueManager.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                tools = tools.Where(t => t.ObjName != null && t.ObjName.Contains(searchString));
+                tools = tools.Where(t => t.ToolName != null && t.ToolName.Contains(searchString));
             }
 
             switch (sortOrder)
             {
-                case "name_desc":
-                    tools = tools.OrderByDescending(t => t.Name);
-                    break;
+                //case "name_desc":
+                //    tools = tools.OrderByDescending(t => t.Name);
+                //    break;
                 case "obj_name_desc":
-                    tools = tools.OrderByDescending(t => t.ObjName);
+                    tools = tools.OrderByDescending(t => t.ToolName);
                     break;
                 case "obj_name":
-                    tools = tools.OrderBy(t => t.ObjName);
+                    tools = tools.OrderBy(t => t.ToolName);
                     break;
-                case "location_desc":
-                    tools = tools.OrderByDescending(t => t.Location);
-                    break;
-                case "location":
-                    tools = tools.OrderBy(t => t.Location);
-                    break;
-                case "time_desc":
-                    tools = tools.OrderByDescending(t => t.Time);
-                    break;
-                case "time":
-                    tools = tools.OrderBy(t => t.Time);
-                    break;
+                //case "location_desc":
+                //    tools = tools.OrderByDescending(t => t.Location);
+                //    break;
+                //case "location":
+                //    tools = tools.OrderBy(t => t.Location);
+                //    break;
+                //case "time_desc":
+                //    tools = tools.OrderByDescending(t => t.Time);
+                //    break;
+                //case "time":
+                //    tools = tools.OrderBy(t => t.Time);
+                //    break;
                 default:
-                    tools = tools.OrderBy(t => t.ObjName);
+                    tools = tools.OrderBy(t => t.ToolName);
                     break;
             }
 
@@ -99,7 +99,7 @@ namespace BlueManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ObjName,MacAddress,Location,Time")] Tool tool)
+        public async Task<IActionResult> Create([Bind("Id,Name,ToolName,MacAddress,Location,Time")] Tool tool)
         {
             if (ModelState.IsValid)
             {
@@ -141,7 +141,7 @@ namespace BlueManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ObjName,MacAddress,Location,Time")] Tool tool)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ToolName,MacAddress,Location,Time")] Tool tool)
         {
             if (id != tool.Id)
             {
@@ -155,7 +155,8 @@ namespace BlueManager.Controllers
                     tool = Trim(tool);
                     if (CanEdit(tool))
                     {
-                        ViewBag.Error = "Narzędzie o takim adresie MAC już istnieje";
+                        // ViewBag.Error = "Narzędzie o takim adresie MAC już istnieje";
+                        ModelState.AddModelError(string.Empty, "Narzędzie o takim adresie MAC już istnieje");
                         return View(tool);
                     }
                     else
@@ -244,10 +245,10 @@ namespace BlueManager.Controllers
         private Tool Trim(Tool tool)
         {
             char[] charsToTrim = { '*', ' ', '\'', '\t' };
-            if (tool.Location != null) tool.Location = tool.Location.Trim(charsToTrim);
+            //if (tool.Location != null) tool.Location = tool.Location.Trim(charsToTrim);
             if (tool.MacAddress != null) tool.MacAddress = tool.MacAddress.Trim(charsToTrim);
-            if (tool.Name != null) tool.Name = tool.Name.Trim(charsToTrim);
-            if (tool.ObjName != null) tool.ObjName = tool.ObjName.Trim(charsToTrim);
+            //if (tool.Name != null) tool.Name = tool.Name.Trim(charsToTrim);
+            if (tool.ToolName != null) tool.ToolName = tool.ToolName.Trim(charsToTrim);
 
             return tool;
         }
