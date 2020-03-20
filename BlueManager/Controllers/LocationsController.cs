@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using BlueManager.Data;
@@ -17,88 +18,80 @@ namespace BlueManager.Controllers
     public class LocationsController : Controller
     {
         private readonly BlueManagerContext _context;
-        private List<Tool> tools = new List<Tool>();
+        private static List<Tool> _cachedTools = new List<Tool>();
+
         public LocationsController(BlueManagerContext context)
         {
-       
-            try
-            {
-                _context = context;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-           
+            _context = context;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchString, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<IActionResult> Index(string sortProperty, bool descending, string searchString, CancellationToken cancellationToken = new CancellationToken())
         {
-
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "time_desc" : "";
-            ViewBag.NameSortParm = sortOrder == "obj_name" ? "obj_name_desc" : "obj_name";
-            ViewBag.ObjNameSortParm = sortOrder == "name" ? "name_desc" : "name";
-            ViewBag.LocationSortParm = sortOrder == "location" ? "location_desc" : "location";
-            //  ViewBag.TimeSortParm = sortOrder == "time" ? "time_desc" : "time";
+            ViewBag.SortProperty = sortProperty;
+            ViewBag.SortDescending = descending;
+            List<Tool> sortedTools = null;
+            bool isOk;
 
             try
             {
-                var tools = from t in _context.Tools
-                            select t;
-
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    tools = tools.Where(t => t.ObjName.Contains(searchString));
-                }
-
-                switch (sortOrder)
-                {
-                    case "obj_name":
-                        tools = tools.OrderBy(t => t.Name);
-                        break;
-                    case "obj_name_desc":
-                        tools = tools.OrderByDescending(t => t.Name);
-                        break;
-                    case "name_desc":
-                        tools = tools.OrderByDescending(t => t.ObjName);
-                        break;
-                    case "name":
-                        tools = tools.OrderBy(t => t.ObjName);
-                        break;
-                    case "location_desc":
-                        tools = tools.OrderByDescending(t => t.Location);
-                        break;
-                    case "location":
-                        tools = tools.OrderBy(t => t.Location);
-                        break;
-                    case "time_desc":
-                        tools = tools.OrderByDescending(t => t.Time);
-                        break;
-                    case "time":
-                        tools = tools.OrderBy(t => t.Time);
-                        break;
-                    default:
-                        tools = tools.OrderByDescending(t => t.Time);
-                        break;
-                }
+                (sortedTools, isOk) = await GetSortedListOfTools(sortProperty, descending, searchString, cancellationToken);
                 ViewBag.Error = "";
-                return View(await tools.ToListAsync());
             }
-            catch (Exception)
+            catch (Exception ex)
+            {
+                isOk = false;
+                Console.WriteLine(ex);
+            }
+
+            if (!isOk)
             {
                 ViewBag.Error = "Błąd połączenia z bazą danych";
-               // var tools2 = new List<Tool>();
-                return View(tools);
-             //   return View(await tools.ToListAsync());
-             
-                throw;
             }
 
-            
+            return View(sortedTools);
         }
 
+        private async Task<(List<Tool>, bool)> GetSortedListOfTools(string sortProperty, bool descending = false, string searchString = null, CancellationToken cancellationToken = new CancellationToken())
+        {
+            // will stop when cancellationToken is requested, or after 5 seconds
+            var timeoutCts = new CancellationTokenSource();
+            var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCts.Token);
+            bool isOk = true;
 
+            try
+            {
+                timeoutCts.CancelAfter(5000);
+                _cachedTools = await _context.Tools.ToListAsync(cts.Token);
+            }
+            catch (Exception ex)
+            {
+                isOk = false;
+                Console.WriteLine(ex);
+            }
+
+            IEnumerable<Tool> tools = _cachedTools;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tools = tools.Where(t => t.ObjName.Contains(searchString));
+            }
+
+            Func<Tool, IComparable> sortExpression = sortProperty switch
+            {
+                "obj_name" => t => t.ObjName,
+                "name"     => t => t.Name,
+                "location" => t => t.Location,
+                "time"     => t => t.Time,
+                _          => t => t.ObjName
+            };
+
+            tools = descending
+                ? tools.OrderByDescending(sortExpression)
+                : tools.OrderBy(sortExpression);
+
+            return (tools.ToList(), isOk);
+
+        }
 
 
     }

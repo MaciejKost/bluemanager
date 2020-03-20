@@ -24,19 +24,19 @@
     <table class="table">
         <tr>
             <th>
-                @Html.ActionLink("Nazwa", "Index", new { sortOrder = ViewBag.NameSortParm })
+                @Html.ActionLink("Nazwa", "Index", new { sortProperty = "name", descending = !ViewBag.SortDescending })
             </th>
             <th>
-                @Html.ActionLink("Nazwa urządzenia", "Index", new { sortOrder = ViewBag.ObjNameSortParm })
+                @Html.ActionLink("Nazwa urządzenia", "Index", new { sortProperty = "obj_name", descending = !ViewBag.SortDescending })
             </th>
             <th>
-                @Html.ActionLink("Lokalizacja", "Index", new { sortOrder = ViewBag.LocationSortParm })
+                @Html.ActionLink("Lokalizacja", "Index", new { sortProperty = "location", descending = !ViewBag.SortDescending })
             </th>
             <th>
                 MAC
             </th>
             <th>
-                @Html.ActionLink("Czas", "Index", new { sortOrder = ViewBag.TimeSortParm })
+                @Html.ActionLink("Czas", "Index", new { sortProperty = "time", descending = !ViewBag.SortDescending })
             </th>
             <th></th>
         </tr>
