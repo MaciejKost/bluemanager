@@ -8,10 +8,12 @@
     <title>@ViewData["Title"] - BlueManager</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/dataTables.bootstrap4.min.css" />
 </head>
 @{
-        var health = await HealthCheckService.CheckHealthAsync();     
-        var icon = health.Status == HealthStatus.Unhealthy ? "database_red.png" : "database_green.png";
+    var health = await HealthCheckService.CheckHealthAsync();
+    var icon = health.Status == HealthStatus.Unhealthy ? "database_red.png" : "database_green.png";
 }
 <body>
     <header>
@@ -36,7 +38,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Hubs" asp-action="Index">Koncentratory</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action=""> 
+                            <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">
                                 <img alt="Database Status" src="~/img/@icon">
                             </a>
                         </li>
@@ -50,15 +52,34 @@
             @RenderBody()
         </main>
     </div>
-
+    <br />
+    <br />
+    <br />
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2020 - BlueManager - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    @*<script src="~/lib/bootstrap/dist/js/dataTables.bootstrap4.min.js"></script>*@
+    <script src="~/lib/bootstrap/dist/js/jquery.dataTables.min.js"></script>
+
+
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                aoColumnDefs: [
+                {"aTargets": [4], "bSortable": true},
+            ],
+                "language": {
+                    "sUrl": "lib/bootstrap/dist/js/Polish.json"
+                }
+            });
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

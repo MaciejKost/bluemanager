@@ -1,66 +1,56 @@
-﻿
-@model List<BlueManagerPlatform.Models.Tool>
+﻿@model List<BlueManagerPlatform.Models.Tool>
 
-@{
+    @{
     ViewBag.Title = "Lokalizacja";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@*<meta http-equiv="refresh" content="5">*@
-<h2>Lokalizacja</h2>
-<h5> @ViewBag.Errorr</h5>
-<p>
-    @Html.ActionLink("Odśwież", "Index")
-</p>
+    }
+    @*<meta http-equiv="refresh" content="5">*@
 
-@using (Html.BeginForm())
-{
-<p>
-    Przeszukaj po nazwie: @Html.TextBox("SearchString")
-    <input type="submit" value="Search" /> ||  @Html.ActionLink("Wróć", "Index", new { searchString = "" })
-</p>
-}
-@*<div style="height: 200px; overflow: auto;">*@
-<div style="height: 400px; overflow: auto;">
-    <table class="table">
-        <tr>
-            <th>
-                @Html.ActionLink("Nazwa", "Index", new { sortProperty = "name", descending = !ViewBag.SortDescending })
-            </th>
-            <th>
-                @Html.ActionLink("Nazwa urządzenia", "Index", new { sortProperty = "obj_name", descending = !ViewBag.SortDescending })
-            </th>
-            <th>
-                @Html.ActionLink("Lokalizacja", "Index", new { sortProperty = "location", descending = !ViewBag.SortDescending })
-            </th>
-            <th>
-                MAC
-            </th>
-            <th>
-                @Html.ActionLink("Czas", "Index", new { sortProperty = "time", descending = !ViewBag.SortDescending })
-            </th>
-            <th></th>
-        </tr>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ObjName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Location)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MacAddress)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Time)
-                </td>
-            </tr>
-        }
-    </table>
+    <div class="container mb-3 mt-3">
+        <table id="example" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Nazwa narzędzia</th>
+                    <th>Lokalizacja</th>
+                    <th>Adres MAC</th>
+                    <th>Czas</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ObjName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MacAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Nazwa narzędzia</th>
+                    <th>Lokalizacja</th>
+                    <th>Adres MAC</th>
+                    <th>Czas</th>
+                </tr>
+            </tfoot>
+        </table>
 
-</div>
+    </div>
+
+ 
