@@ -13,5 +13,7 @@ namespace BlueManagerPlatform.Models
         public string IpAddress { get; set; }
         [Display(Name = "Lokalizacja")]
         public string LocationName { get; set;}
+
+        public string GetUrl() => $"http://{IpAddress}:8000/";
     }
 }
