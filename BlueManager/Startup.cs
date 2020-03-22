@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,12 +10,8 @@ using BlueManager.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System.Text;
-using BlueManager.Localization;
 using BlueManager.Localization.Resources;
-using Newtonsoft.Json;
 using HealthChecks.UI.Client;
 
 namespace BlueManager
@@ -37,11 +28,10 @@ namespace BlueManager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllersWithViews();
 
             services.AddDbContext<BlueManagerContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BlueManagerContext")));
+                options.UseSqlServer(Configuration.GetConnectionString("BlueManagerContext")));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -59,7 +49,7 @@ namespace BlueManager
                 {
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
-                         var assemblyName = new AssemblyName(typeof(ValidationMessages).GetTypeInfo().Assembly.FullName);
+                        var assemblyName = new AssemblyName(typeof(ValidationMessages).GetTypeInfo().Assembly.FullName);
                         return factory.Create("ValidationMessages", assemblyName.Name);
                     };
                 });
@@ -69,8 +59,7 @@ namespace BlueManager
                 .AddSqlServer(Configuration["ConnectionStrings:BlueManagerContext"]);
             services.AddHealthChecksUI();
 
-            services.AddSingleton<IHostedService, SearchingDevicesService>();
-
+            services.AddSingleton<IHostedService, ReportPollingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +75,7 @@ namespace BlueManager
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
