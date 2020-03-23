@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using BlueManager.Localization.Resources;
 using HealthChecks.UI.Client;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace BlueManager
 {
@@ -56,7 +57,8 @@ namespace BlueManager
 
 
             services.AddHealthChecks()
-                .AddSqlServer(Configuration["ConnectionStrings:BlueManagerContext"]);
+                .AddSqlServer(Configuration["ConnectionStrings:BlueManagerContext"])
+                .AddCheck<HubsHealthCheck>("Hubs", HealthStatus.Degraded);
             services.AddHealthChecksUI();
 
             services.AddSingleton<IHostedService, ReportPollingService>();
