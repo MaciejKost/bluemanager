@@ -65,7 +65,7 @@ namespace BlueManager.Controllers
             }
 
             var hub = await _context.Hubs
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (hub == null)
             {
                 return NotFound();
@@ -130,7 +130,7 @@ namespace BlueManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,IpAddress,LocationName")] Hub hub)
         {
-            if (id != hub.ID)
+            if (id != hub.Id)
             {
                 return NotFound();
             }
@@ -155,7 +155,7 @@ namespace BlueManager.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!HubExists(hub.ID))
+                    if (!HubExists(hub.Id))
                     {
                         return NotFound();
                     }
@@ -178,7 +178,7 @@ namespace BlueManager.Controllers
             }
 
             var hub = await _context.Hubs
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (hub == null)
             {
                 return NotFound();
@@ -200,7 +200,7 @@ namespace BlueManager.Controllers
 
         private bool HubExists(int id)
         {
-            return _context.Hubs.Any(e => e.ID == id);
+            return _context.Hubs.Any(e => e.Id == id);
         }
 
         private bool IpExists(string ip)
@@ -213,12 +213,12 @@ namespace BlueManager.Controllers
             var _hub = _context.Hubs.Where(x => x.IpAddress == hub.IpAddress).SingleOrDefault();
             if (_hub != null)
             {
-                if (_hub.ID == hub.ID && _hub.IpAddress == hub.IpAddress)
+                if (_hub.Id == hub.Id && _hub.IpAddress == hub.IpAddress)
                 {
                     _context.Entry(_hub).State = EntityState.Detached;
                     return false;
                 }
-                else if (_hub.ID != hub.ID && _hub.IpAddress == hub.IpAddress)
+                else if (_hub.Id != hub.Id && _hub.IpAddress == hub.IpAddress)
                 {
                     _context.Entry(_hub).State = EntityState.Detached;
                     return true;

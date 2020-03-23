@@ -55,11 +55,13 @@ namespace BlueManager.Services
                                 {
                                     var toolAtHub = new ToolAtHub()
                                     {
-                                        Tool = updateTool,
+                                       // Tool = updateTool,
+                                        ToolId = updateTool.Id,
                                         HubId = reportDownload.HubId,
                                         BleName = tool.Name,
                                         Timestamp = tool.Timestamp
                                     };
+                                    var test = toolAtHub;
 
                                     await context.ToolAtHubs.AddAsync(toolAtHub, stoppingToken);
                                     await context.SaveChangesAsync(stoppingToken);
@@ -87,18 +89,20 @@ namespace BlueManager.Services
                 using var http = _httpClientFactory.CreateClient();
                 http.Timeout = TimeSpan.FromMilliseconds(_configuration.PollingRequestTimeout);
                 var url = h.GetUrl();
+               // var url = $"http://{h.IpAddress}:8000/";
                 try
                 {
+                   
                     var reportString = await http.GetStringAsync(url);
                     var report = JsonConvert.DeserializeObject<HubReport>(reportString);
 
-                    reports.Add(new ReportDownload(h.ID, true, report));
+                    reports.Add(new ReportDownload(h.Id, true, report));
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error downloading report for HubId: {h.ID} from URL: {url}");
+                    Console.Error.WriteLine($"Error downloading report for HubId: {h.Id} from URL: {url}");
                     Console.Error.WriteLine(ex);
-                    reports.Add(new ReportDownload(h.ID, false, null));
+                    reports.Add(new ReportDownload(h.Id, false, null));
                 }
             }).ToList();
 

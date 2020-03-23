@@ -27,8 +27,8 @@ namespace BlueManager.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ToolAtHub>()
-                .HasNoKey();
+            //modelBuilder.Entity<ToolAtHub>()
+            //    .HasNoKey();
             modelBuilder.Entity<ToolBatteryReadout>()
                 .HasNoKey();
         }

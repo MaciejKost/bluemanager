@@ -8,7 +8,7 @@ namespace BlueManagerPlatform.Models
 {
     public class Hub
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         [Display(Name = "Adres IP")]
         public string IpAddress { get; set; }
         [Display(Name = "Lokalizacja")]

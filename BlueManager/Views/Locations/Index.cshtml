@@ -1,4 +1,4 @@
-﻿@model List<BlueManagerPlatform.Models.Tool>
+﻿@model List<BlueManagerPlatform.Models.ToolAtHub>
 
     @{
     ViewBag.Title = "Lokalizacja";
@@ -22,36 +22,33 @@
                 @foreach (var item in Model)
                 {
                 <tr>
-                    @*<td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>*@
                     <td>
-                        @Html.DisplayFor(modelItem => item.ToolName)
+                        @Html.DisplayFor(modelItem => item.BleName)
                     </td>
-                    @*
                     <td>
-                        @Html.DisplayFor(modelItem => item.Location)
-                    </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MacAddress)
+                        @Html.DisplayFor(modelItem => item.Tool.ToolName)
                     </td>
-                    @*
+                    
                     <td>
-                        @Html.DisplayFor(modelItem => item.Time)
-                    </td>*@
+                        @Html.DisplayFor(modelItem => item.Hub.LocationName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tool.MacAddress)
+                    </td>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Timestamp)
+                    </td>
                 </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    @*
-                    <th>Nazwa</th>*@
+                    <th>Nazwa</th>
                     <th>Nazwa narzędzia</th>
-                    @*
-                    <th>Lokalizacja</th>*@
+                    <th>Lokalizacja</th>
                     <th>Adres MAC</th>
-                    @*
-                    <th>Czas</th>*@
+                    <th>Czas</th>
                 </tr>
             </tfoot>
         </table>

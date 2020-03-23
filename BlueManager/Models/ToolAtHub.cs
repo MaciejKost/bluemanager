@@ -4,6 +4,7 @@ namespace BlueManagerPlatform.Models
 {
     public class ToolAtHub
     {
+        public int Id { get; set; }
         public int HubId { get; set; }
         public int ToolId { get; set; }
         public string BleName { get; set; }

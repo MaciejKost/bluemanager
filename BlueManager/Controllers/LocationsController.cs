@@ -18,7 +18,7 @@ namespace BlueManager.Controllers
     public class LocationsController : Controller
     {
         private readonly BlueManagerContext _context;
-        private static List<Tool> _cachedTools = new List<Tool>();
+        private static List<ToolAtHub> _cachedTools = new List<ToolAtHub>();
 
         public LocationsController(BlueManagerContext context)
         {
@@ -29,29 +29,50 @@ namespace BlueManager.Controllers
         {
             ViewBag.SortProperty = sortProperty;
             ViewBag.SortDescending = descending;
-            List<Tool> sortedTools = null;
+            List<ToolAtHub> sortedTools = null;
+            List<ToolAtHub> newList = new List<ToolAtHub>();
+            List<ToolAtHub> newList2 = new List<ToolAtHub>();
+            ToolAtHub lastTool = new ToolAtHub();
             bool isOk;
-
-            try
+            await using (_context)
             {
-                (sortedTools, isOk) = await GetSortedListOfTools(sortProperty, descending, searchString, cancellationToken);
-                ViewBag.Error = "";
-            }
-            catch (Exception ex)
-            {
-                isOk = false;
-                Console.WriteLine(ex);
-            }
+                try
+                {
+                    //   (sortedTools, isOk) = await GetSortedListOfTools(sortProperty, descending, searchString, cancellationToken);
+                    ViewBag.Error = "";
 
-            if (!isOk)
-            {
-                ViewBag.Error = "Błąd połączenia z bazą danych";
-            }
 
-            return View(sortedTools);
+                   
+                     var toolNames = await _context.Tools.ToListAsync(cancellationToken);
+                   //  var lastTool2 = await _context.ToolAtHubs.ToListAsync(cancellationToken);
+                    //   var lastTool3 = await _context.ToolAtHubs.Include(x => x.Tool).Include(x => x.Hub).ToListAsync(cancellationToken);
+
+                    foreach (var tool in toolNames)
+                    {
+                        lastTool = await _context.ToolAtHubs.OrderByDescending(t => t.Timestamp).Include(x => x.Tool).Include(x => x.Hub).Where(x => x.ToolId == tool.Id).FirstOrDefaultAsync(cancellationToken);
+                        if (lastTool != null)
+                        {
+                            newList.Add(lastTool);
+                        }
+                    }
+                    isOk = true;
+                }
+                catch (Exception ex)
+                {
+                    isOk = false;
+                    Console.WriteLine(ex);
+                }
+            }
+            // if (!isOk)
+            //{
+            //    ViewBag.Error = "Błąd połączenia z bazą danych";
+            //}
+
+            //return View(sortedTools);
+            return View(newList);
         }
 
-        private async Task<(List<Tool>, bool)> GetSortedListOfTools(string sortProperty, bool descending = false, string searchString = null, CancellationToken cancellationToken = new CancellationToken())
+        private async Task<(List<ToolAtHub>, bool)> GetSortedListOfTools(string sortProperty, bool descending = false, string searchString = null, CancellationToken cancellationToken = new CancellationToken())
         {
             // will stop when cancellationToken is requested, or after 5 seconds
             var timeoutCts = new CancellationTokenSource();
@@ -61,7 +82,12 @@ namespace BlueManager.Controllers
             try
             {
                 timeoutCts.CancelAfter(5000);
-                _cachedTools = await _context.Tools.ToListAsync(cts.Token);
+                // _cachedTools = await _context.Tools.ToListAsync(cts.Token);
+                _cachedTools = await _context.ToolAtHubs.ToListAsync(cts.Token);
+                var _toolNames = await _context.Tools.ToListAsync(cts.Token);
+
+
+
             }
             catch (Exception ex)
             {
@@ -69,27 +95,27 @@ namespace BlueManager.Controllers
                 Console.WriteLine(ex);
             }
 
-            IEnumerable<Tool> tools = _cachedTools;
+            IEnumerable<ToolAtHub> tools = _cachedTools;
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                tools = tools.Where(t => t.ToolName.Contains(searchString));
+                tools = tools.Where(t => t.Tool.ToolName.Contains(searchString));
             }
 
-            Func<Tool, IComparable> sortExpression = sortProperty switch
+            Func<ToolAtHub, IComparable> sortExpression = sortProperty switch
             {
-                "obj_name" => t => t.ToolName,
-                //"name"     => t => t.Name,
-                //"location" => t => t.Location,
-                //"time"     => t => t.Time,
-                _          => t => t.ToolName
+                "obj_name" => t => t.Tool.ToolName,
+                "name" => t => t.BleName,
+                "location" => t => t.Hub.LocationName,
+                "time" => t => t.Timestamp,
+                _ => t => t.Tool.ToolName
             };
 
             tools = descending
                 ? tools.OrderByDescending(sortExpression)
                 : tools.OrderBy(sortExpression);
-
-            return (tools.ToList(), isOk);
+            //  return (tools.ToList(), isOk);
+            return (_cachedTools.ToList(), isOk);
 
         }
 
