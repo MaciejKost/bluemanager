@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using BlueManagerPlatform.Models;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-
+using BlueManager.Models;
 
 namespace BlueManager.Data
 {
-
-
     public class BlueManagerContext : DbContext
     {
         public BlueManagerContext(DbContextOptions<BlueManagerContext> options)
@@ -19,18 +11,22 @@ namespace BlueManager.Data
         {
         }
 
-        public DbSet<BlueManagerPlatform.Models.Hub> Hubs { get; set; }
+        public DbSet<Hub> Hubs { get; set; }
 
-        public DbSet<BlueManagerPlatform.Models.Tool> Tools { get; set; }
-        public DbSet<BlueManagerPlatform.Models.ToolAtHub> ToolAtHubs { get; set; }
-        public DbSet<BlueManagerPlatform.Models.ToolBatteryReadout> ToolBatteryReadouts { get; set; }
+        public DbSet<Tool> Tools { get; set; }
+        public DbSet<ToolAtHub> ToolAtHubs { get; set; }
+        public DbSet<ToolBatteryReadout> ToolBatteryReadouts { get; set; }
+
+        public DbSet<ToolLastLocation> ToolLastLocations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<ToolAtHub>()
-            //    .HasNoKey();
             modelBuilder.Entity<ToolBatteryReadout>()
                 .HasNoKey();
+
+            modelBuilder.Entity<ToolLastLocation>()
+                .HasNoKey()
+                .ToView(nameof(ToolLastLocations));
         }
     }
 }
