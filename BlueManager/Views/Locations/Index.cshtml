@@ -1,4 +1,4 @@
-﻿@model List<BlueManagerPlatform.Models.ToolAtHub>
+﻿@model List<ToolLastLocation>
 
     @{
     ViewBag.Title = "Lokalizacja";
@@ -19,28 +19,16 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.BleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Tool.ToolName)
-                    </td>
-                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Hub.LocationName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Tool.MacAddress)
-                    </td>
-                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Timestamp)
-                    </td>
+                    <td> @Html.DisplayFor(modelItem => item.BleName) </td>
+                    <td> @Html.DisplayFor(modelItem => item.Tool.ToolName) </td>
+                    <td> @Html.DisplayFor(modelItem => item.Hub.LocationName) </td>
+                    <td> @Html.DisplayFor(modelItem => item.Tool.MacAddress) </td>
+                    <td> @Html.DisplayFor(modelItem => item.Timestamp) </td>
                 </tr>
-                }
+            }
             </tbody>
             <tfoot>
                 <tr>
@@ -57,7 +45,7 @@
 
     @section scripts {
 
-    
+
     @*<script src="~/lib/bootstrap/dist/js/dataTables.bootstrap4.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap-table.min.js"></script>*@
 
