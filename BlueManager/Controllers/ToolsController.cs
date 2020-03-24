@@ -22,52 +22,9 @@ namespace BlueManager.Controllers
         }
 
         // GET: Tools
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index()
         {
-
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "obj_name_desc" : "";
-           // ViewBag.NameSortParm = sortOrder == "obj_name" ? "obj_name_desc" : "obj_name";
-            ViewBag.ObjNameSortParm = sortOrder == "name" ? "name_desc" : "name";
-            ViewBag.LocationSortParm = sortOrder == "location" ? "location_desc" : "location";
-            ViewBag.TimeSortParm = sortOrder == "time" ? "time_desc" : "time";
-
-            var tools = _context.Tools.AsQueryable();
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                tools = tools.Where(t => t.ToolName != null && t.ToolName.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                //case "name_desc":
-                //    tools = tools.OrderByDescending(t => t.Name);
-                //    break;
-                case "obj_name_desc":
-                    tools = tools.OrderByDescending(t => t.ToolName);
-                    break;
-                case "obj_name":
-                    tools = tools.OrderBy(t => t.ToolName);
-                    break;
-                //case "location_desc":
-                //    tools = tools.OrderByDescending(t => t.Location);
-                //    break;
-                //case "location":
-                //    tools = tools.OrderBy(t => t.Location);
-                //    break;
-                //case "time_desc":
-                //    tools = tools.OrderByDescending(t => t.Time);
-                //    break;
-                //case "time":
-                //    tools = tools.OrderBy(t => t.Time);
-                //    break;
-                default:
-                    tools = tools.OrderBy(t => t.ToolName);
-                    break;
-            }
-
-            var toolsList = await tools.ToListAsync();
-
+            var toolsList = await _context.Tools.ToListAsync();
             return View(toolsList);
         }
 
