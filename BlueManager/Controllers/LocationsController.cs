@@ -18,14 +18,24 @@ namespace BlueManager.Controllers
     public class LocationsController : Controller
     {
         private readonly BlueManagerContext _context;
+        private readonly HealthCheckService _health;
 
-        public LocationsController(BlueManagerContext context)
+        public LocationsController(BlueManagerContext context, HealthCheckService health)
         {
             _context = context;
+            _health = health;
         }
 
         public async Task<IActionResult> Index(CancellationToken cancellationToken = new CancellationToken())
         {
+
+            var report = await _health.CheckHealthAsync();
+            foreach (var item in report.Entries["Hubs"].Data)
+            {
+                var test = item.Key;
+                var test2 = (bool)item.Value;
+            }
+            
             List<ToolLastLocation> toolLastLocations;
             await using (_context)
             {

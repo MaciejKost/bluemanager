@@ -1,60 +1,42 @@
 ﻿@model List<ToolLastLocation>
 
-    @{
+@{
     ViewBag.Title = "Lokalizacja";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    }
-    @*<meta http-equiv="refresh" content="5">*@
+}
+@*<meta http-equiv="refresh" content="5">*@
 
 
-    <div class="container mb-3 mt-3">
-        <table id="example" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>Nazwa</th>
-                    <th>Nazwa narzędzia</th>
-                    <th>Lokalizacja</th>
-                    <th>Adres MAC</th>
-                    <th>Czas</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td> @Html.DisplayFor(modelItem => item.BleName) </td>
-                    <td> @Html.DisplayFor(modelItem => item.Tool.ToolName) </td>
-                    <td> @Html.DisplayFor(modelItem => item.Hub.LocationName) </td>
-                    <td> @Html.DisplayFor(modelItem => item.Tool.MacAddress) </td>
-                    <td> @Html.DisplayFor(modelItem => item.Timestamp) </td>
-                </tr>
-            }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Nazwa</th>
-                    <th>Nazwa narzędzia</th>
-                    <th>Lokalizacja</th>
-                    <th>Adres MAC</th>
-                    <th>Czas</th>
-                </tr>
-            </tfoot>
-        </table>
-
-    </div>
-
-    @section scripts {
+<table id="dt_basic" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Nazwa narzędzia</th>
+            <th>Lokalizacja</th>
+            <th>Adres MAC</th>
+            <th>Czas</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td> @Html.DisplayFor(modelItem => item.BleName) </td>
+                <td> @Html.DisplayFor(modelItem => item.Tool.ToolName) </td>
+                <td> @Html.DisplayFor(modelItem => item.Hub.LocationName) </td>
+                <td> @Html.DisplayFor(modelItem => item.Tool.MacAddress) </td>
+                <td> @Html.DisplayFor(modelItem => item.Timestamp) </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 
-    @*<script src="~/lib/bootstrap/dist/js/dataTables.bootstrap4.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap-table.min.js"></script>*@
-
-    <script src="~/lib/bootstrap/dist/js/jquery.dataTables.min.js"></script>
-
-
+@section scripts {
+    <script src="~/lib/bootstrap/dist/js/datatables.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#example').DataTable({
+     
+            $('#dt_basic').DataTable({
                 aoColumnDefs: [
                     { "aTargets": [4], "bSortable": true },
                 ],
@@ -62,7 +44,6 @@
                     "sUrl": "lib/bootstrap/dist/js/Polish.json"
                 }
             });
-        });
+     
     </script>
-
-    }
+}
