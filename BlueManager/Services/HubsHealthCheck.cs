@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using BlueManager.Data;
+using BlueManager.Services.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -25,7 +26,8 @@ namespace BlueManager
         {
             var hubs = await _context.Hubs.ToListAsync(cancellationToken);
 
-            var hubsHealth = new Dictionary<string, bool>();
+            var hubsHealth = new Dictionary<string, CheckReport>();
+            //var hubsHealth = new List<CheckReport>();
             foreach (var hub in hubs)
             {
                 try
@@ -35,18 +37,22 @@ namespace BlueManager
                         http.Timeout = TimeSpan.FromSeconds(2);
                         var response = await http.SendAsync(new HttpRequestMessage(HttpMethod.Head, hub.GetUrl()), cancellationToken);
                         response.EnsureSuccessStatusCode();
-                        hubsHealth.Add(hub.IpAddress, true);
+                      //  hubsHealth.Add(hub.IpAddress, true);
+                        hubsHealth.Add(hub.IpAddress, new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, Status = true });
+                       // hubsHealth.Add(new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, Status = true });
                     }
                 }
                 catch (Exception ex)
                 {
                     // TODO: log exception
-                    hubsHealth.Add(hub.IpAddress, false);
+                    //hubsHealth.Add(hub.IpAddress, false);
+                      hubsHealth.Add(hub.IpAddress, new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, Status = false });
+                  //  hubsHealth.Add(new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, Status = false });
                 }
             }
 
             return new HealthCheckResult(
-                hubsHealth.Values.All(x => x) ? HealthStatus.Healthy : HealthStatus.Unhealthy,
+                hubsHealth.Values.All(x => x.Status) ? HealthStatus.Healthy : HealthStatus.Unhealthy,
                 "Description",
                 null,
                 hubsHealth.ToDictionary(k => k.Key, v => (object) v.Value)

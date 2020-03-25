@@ -25,35 +25,8 @@ namespace BlueManager.Controllers
         // GET: Hubs
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "location_desc" : "";
-            //ViewBag.LocationSortParm = sortOrder == "location" ? "location_desc" : "location";
-            ViewBag.IpSortParm = sortOrder == "ip" ? "ip_desc" : "ip";
-            var hubs = from h in _context.Hubs
-                       select h;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                hubs = hubs.Where(h => h.LocationName.Contains(searchString)
-                                || h.IpAddress.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                case "location":
-                    hubs = hubs.OrderBy(h => h.LocationName);
-                    break;
-                case "ip_desc":
-                    hubs = hubs.OrderByDescending(h => h.IpAddress);
-                    break;
-                case "ip":
-                    hubs = hubs.OrderBy(h => h.IpAddress);
-                    break;
-                default:
-                    hubs = hubs.OrderByDescending(h => h.LocationName);
-                    break;
-            }
-
-            return View(await hubs.ToListAsync());
+            var hubsList = await _context.Hubs.ToListAsync();
+            return View(hubsList);
         }
 
         // GET: Hubs/Details/5

@@ -1,0 +1,24 @@
+﻿@model List<CheckReport>
+@{
+    ViewData["Title"] = "Status";
+    Layout = null;
+}
+
+<p>Status połączeń:</p>
+
+<ul class="list-group">
+    @foreach (var item in Model)
+    {
+      
+        @*<li class="list-group-item">@message</li>*@
+    <li class="nav-item">
+        @Html.DisplayFor(modelItem => item.IpAddress);
+    </li>
+    }
+</ul>
+
+@*<ul class="list-group">
+        <li class="list-group-item">Turns out NASA can't even improve on duct tape... Duct tape is magic and should be worshipped.</li>
+        <li class="list-group-item">How come Aquaman can control whales? They're mammals! Makes no sense.</li>
+        <li class="list-group-item">As with most of life's problems, this one can be solved by a box of pure radiation.</li>
+    </ul>*@
