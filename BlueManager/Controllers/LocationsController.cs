@@ -36,6 +36,8 @@ namespace BlueManager.Controllers
                         .Include(x => x.Tool)
                         .Include(x => x.Hub)
                         .ToListAsync(cancellationToken);
+                    
+                    
                 }
                 catch (Exception ex)
                 {

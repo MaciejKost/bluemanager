@@ -5,24 +5,25 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - BlueManager</title>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/lib/jquery/d" />
-        <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/dataTables.bootstrap4.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BlueManager</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" href="~/lib/jquery/d" />*@
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/dataTables.bootstrap4.min.css" />
 
 </head>
 @{
     var health = await HealthCheckService.CheckHealthAsync();
     var icon = health.Status == HealthStatus.Unhealthy ? "database_red.png" : "database_green.png";
-    var textBlue = health.Status == HealthStatus.Unhealthy ? "<font color='red'>BlueManager</font>" : "BlueManager";
 }
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlueManager</a>
+                @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlueManager</a>*@
+                @*<a href="#" data-toggle="popover" data-trigger="click" class="navbar-brand">BlueManager</a>*@
+                <a href="#" id="popoverNavLink" class="navbar-brand">BlueManager</a>
 
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
@@ -36,9 +37,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Hubs" asp-action="Index">Koncentratory</a>
                         </li>
-                        <li class="nav-item">
-                            <a id="popoverNavLink" class="nav-link text-dark" href="#">Popover</a>
-                        </li>
+                        @*<li class="nav-item">
+                                <a id="popoverNavLink" class="nav-link text-dark" href="#">Popover</a>
+                            </li>*@
                         @*<li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">
                                     <img alt="Database Status" src="~/img/@icon">
@@ -57,34 +58,42 @@
     <br />
     <br />
     <br />
-    @*<footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2020 - BlueManager - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </footer>*@
 
 
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>*@
     <script src="~/lib/bootstrap/dist/js/jquery-3.3.1.js"></script>
-    @*     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>*@
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     <script type="text/javascript">
+        updateStatus();
+        $("#popoverNavLink").click(updateStatus);
+
         $.ajax({
-            url: '/Status/Status',
-            success: function (result) {
+            success: function () {
                 $('#popoverNavLink').popover({
-                    content: result,
+                    content: '',
                     trigger: 'click',
                     html: true,
                     animation: false
                 })
             }
         });
+
+        function updateStatus() {
+            $.ajax({
+                url: '/Status/Status',
+                success: function (result) {
+                    $("#popoverNavLink").attr("data-content", result)
+                }
+            });
+        };
+
+
+
     </script>
 
 

@@ -23,6 +23,7 @@ CREATE TABLE [ToolAtHubs] (
 GO
 
 CREATE TABLE [ToolBatteryReadouts] (
+                                       [Id] int PRIMARY KEY IDENTITY(1, 1),
                                        [ToolId] int,
                                        [Timestamp] datetime2,
                                        [BatteryState] int
@@ -44,7 +45,7 @@ GO
 ---------------
 
 
-CREATE VIEW ToolLastLocation AS
+CREATE VIEW ToolLastLocations AS
 SELECT ToolId, HubId, BleName, Timestamp
 FROM (
          SELECT *, ROW_NUMBER() OVER (PARTITION BY p0.ToolId ORDER BY p0.Timestamp DESC) as row

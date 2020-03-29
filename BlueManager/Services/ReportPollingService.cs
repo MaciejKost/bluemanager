@@ -51,18 +51,29 @@ namespace BlueManager.Services
                             foreach (var tool in reportDownload.Report.Devices)
                             {
                                 var updateTool = await context.Tools.Where(x => x.MacAddress == tool.MacAddress).FirstOrDefaultAsync(stoppingToken);
+                           
                                 if (updateTool?.ToolName != null)
-                                {
+                                { 
                                     var toolAtHub = new ToolAtHub()
                                     {
                                        // Tool = updateTool,
                                         ToolId = updateTool.Id,
                                         HubId = reportDownload.HubId,
                                         BleName = tool.Name,
-                                        Timestamp = tool.Timestamp
+                                        Timestamp = tool.Timestamp                         
                                     };
-                                    var test = toolAtHub;
 
+                                    var toolBattery = new ToolBatteryReadout()
+                                    {
+                                        ToolId = updateTool.Id,
+                                        Timestamp = tool.BatteryTimestamp,
+                                        BatteryState = tool.BatteryLevel
+
+                                    };
+
+                                    // var test = toolBattery;
+                                    await context.ToolBatteryReadouts.AddAsync(toolBattery, stoppingToken);
+                                    await context.SaveChangesAsync(stoppingToken);
                                     await context.ToolAtHubs.AddAsync(toolAtHub, stoppingToken);
                                     await context.SaveChangesAsync(stoppingToken);
                                 }

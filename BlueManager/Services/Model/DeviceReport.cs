@@ -15,5 +15,12 @@ namespace BlueManager.Services.Model
         [JsonProperty("time")]
         [JsonConverter(typeof(UnixDateTimeConverter))]
         public DateTime Timestamp { get; set; }
+
+        [JsonProperty("battery_time")]
+        [JsonConverter(typeof(UnixDateTimeConverter))]
+        public DateTime BatteryTimestamp { get; set; }
+      
+        [JsonProperty("battery_level")]
+        public int BatteryLevel { get; set; }
     }
 }

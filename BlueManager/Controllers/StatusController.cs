@@ -34,24 +34,9 @@ namespace BlueManager.Controllers
             foreach (var item in report.Entries["Hubs"].Data)
             {
                 var ipAddress = item.Key;
-                //var status = (bool)item.Value ? "Połączono" : "Błąd połączenia";
                 var status = (CheckReport)item.Value;
                 Messages.Add($"{status.LocationName}.({status.IpAddress}) : {status.Status.ToString()}.");
                 statusList.Add((CheckReport)item.Value);
-                //await using (_context)
-                //{
-                //    try
-                //    {
-                //        // var _hub = _context.Hubs.Where(x => x.IpAddress == "192.168.1.40").SingleOrDefault();
-                //        //    var hubsList = await _context.Hubs.ToListAsync();
-                //        //Messages.Add($"{_hub.LocationName}. : {status}.");
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        Console.WriteLine(ex);
-                //        // throw;
-                //    }
-                //}
             }
             return View(statusList);
         }
