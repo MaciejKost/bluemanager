@@ -4,7 +4,7 @@
     Layout = null;
 }
 
-<p>Status połączeń:</p>
+<h6 class="text-center">Status połączeń</h6>
 
 <ul class="list-group ">
     <b class="nav-item"> Nieaktywne: </b>
@@ -26,7 +26,7 @@
     {
         @if (@item.Status)
         {
-             <li class="text-success mx-3" >
+            <li class="text-success mx-3">
                 @item.LocationName (@item.IpAddress) : @item.Status.ToString()
             </li>
         }

@@ -16,14 +16,15 @@
 @{
     var health = await HealthCheckService.CheckHealthAsync();
     var icon = health.Status == HealthStatus.Unhealthy ? "database_red.png" : "database_green.png";
+    var connClass = health.Status == HealthStatus.Unhealthy ? "text-denger" : "";
 }
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BlueManager</a>*@
+                <a href="#" id="popoverNavLink" class="navbar-brand @connClass">BlueManager</a>
                 @*<a href="#" data-toggle="popover" data-trigger="click" class="navbar-brand">BlueManager</a>*@
-                <a href="#" id="popoverNavLink" class="navbar-brand">BlueManager</a>
+                @*<a href="#" id="popoverNavLink" class="navbar-brand">BlueManager</a>*@
 
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
@@ -37,14 +38,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Hubs" asp-action="Index">Koncentratory</a>
                         </li>
-                        @*<li class="nav-item">
-                                <a id="popoverNavLink" class="nav-link text-dark" href="#">Popover</a>
-                            </li>*@
-                        @*<li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">
-                                    <img alt="Database Status" src="~/img/@icon">
-                                </a>
-                            </li>*@
                     </ul>
                 </div>
             </div>
@@ -69,7 +62,10 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
-        updateStatus();
+        $(function () {
+            updateStatus();
+        });
+
         $("#popoverNavLink").click(updateStatus);
 
         $.ajax({
@@ -92,8 +88,18 @@
             });
         };
 
-
-
+        //window.setInterval(function () {
+        //    updateStatus();
+        //    alert('<%=Session["UserName"] %>');
+        //    var username = '<%= Session["UserName"] %>';
+        //    alert(username );
+        //    $.ajax({
+        //        url: '/Status/Status',
+        //        success: function (result) {
+        //            var test = result;
+        //        }
+        //    });          
+        //    }, 5000)
     </script>
 
 

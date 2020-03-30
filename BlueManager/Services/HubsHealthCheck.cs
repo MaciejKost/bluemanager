@@ -8,16 +8,19 @@ using BlueManager.Data;
 using BlueManager.Services.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Logging;
 
 namespace BlueManager
 {
     public class HubsHealthCheck : IHealthCheck
     {
         private BlueManagerContext _context;
+        private readonly ILogger<HubsHealthCheck> _logger;
 
-        public HubsHealthCheck(BlueManagerContext context)
+        public HubsHealthCheck(BlueManagerContext context, ILogger<HubsHealthCheck> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(
@@ -44,7 +47,7 @@ namespace BlueManager
                 }
                 catch (Exception ex)
                 {
-                    // TODO: log exception
+                    _logger.LogWarning(ex, "Problem connection to server {IP}({Location}) at {Time}", hub.IpAddress, hub.LocationName, DateTime.Now);
                     //hubsHealth.Add(hub.IpAddress, false);
                       hubsHealth.Add(hub.IpAddress, new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, Status = false });
                   //  hubsHealth.Add(new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, Status = false });

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlueManager.Data;
 using BlueManager.Services.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Logging;
 
 namespace BlueManager.Controllers
 {
@@ -14,11 +16,14 @@ namespace BlueManager.Controllers
     {
         private readonly BlueManagerContext _context;
         private readonly HealthCheckService _health;
+        private readonly ILogger<StatusController> _logger;
+
         public List<string> Messages { get; set; }
-        public StatusController(BlueManagerContext context, HealthCheckService health)
+        public StatusController(BlueManagerContext context, HealthCheckService health, ILogger<StatusController> logger)
         {
             _context = context;
             _health = health;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -26,7 +31,7 @@ namespace BlueManager.Controllers
         }
 
         public async Task<IActionResult> Status()
-        {
+        {        
             var Messages = new List<string>();
             var statusList = new List<CheckReport>();
             var report = await _health.CheckHealthAsync();
@@ -38,6 +43,7 @@ namespace BlueManager.Controllers
                 Messages.Add($"{status.LocationName}.({status.IpAddress}) : {status.Status.ToString()}.");
                 statusList.Add((CheckReport)item.Value);
             }
+           
             return View(statusList);
         }
     }

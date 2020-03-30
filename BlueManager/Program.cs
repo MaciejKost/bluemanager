@@ -20,18 +20,27 @@ namespace BlueManager
         public static async Task Main(string[] args)
         {
             using (var host = Host.CreateDefaultBuilder(args)
-                 .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureLogging((context, logging) => 
+                {
+                    logging.ClearProviders();
+                    logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+                    logging.AddDebug();
+                    logging.AddConsole();                
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
                  {
                      webBuilder.UseStartup<Startup>();
                  })
                 .Build())
             {
+                var logger = host.Services.GetRequiredService<ILogger<Program>>();
                 // Start the host
                 await host.StartAsync();
-
+                logger.LogInformation("The application has started at {Time}", DateTime.Now);
                 // Wait for the host to shutdown
                 await host.WaitForShutdownAsync();
             }
+           
         }
 
         //public static IWebHost BuildWebHost(string[] args) =>

@@ -11,17 +11,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-
+using Microsoft.Extensions.Logging;
 
 namespace BlueManager.Controllers
 {
     public class LocationsController : Controller
     {
         private readonly BlueManagerContext _context;
+        private readonly ILogger<LocationsController> _logger;
 
-        public LocationsController(BlueManagerContext context)
+        public LocationsController(BlueManagerContext context, ILogger<LocationsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index(CancellationToken cancellationToken = new CancellationToken())
@@ -41,7 +43,7 @@ namespace BlueManager.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    _logger.LogCritical(ex, "There was a problem with database at {Time}", DateTime.Now);
                     throw;
                 }
             }

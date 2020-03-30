@@ -12,6 +12,7 @@ using BlueManagerPlatform.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -22,12 +23,14 @@ namespace BlueManager.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ReportPollingConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<ReportPollingService> _logger;
 
-        public ReportPollingService(IServiceScopeFactory scopeFactory, IOptions<ReportPollingConfiguration> opt, IHttpClientFactory httpClientFactory)
+        public ReportPollingService(IServiceScopeFactory scopeFactory, IOptions<ReportPollingConfiguration> opt, IHttpClientFactory httpClientFactory, ILogger<ReportPollingService> logger)
         {
             _scopeFactory = scopeFactory;
             _configuration = opt.Value;
             _httpClientFactory = httpClientFactory;
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -39,7 +42,7 @@ namespace BlueManager.Services
                     using var scope = _scopeFactory.CreateScope();
                     var context = scope.ServiceProvider.GetRequiredService<BlueManagerContext>();
 
-                    Console.WriteLine("[SearchingDevicesService] Service is Running" + DateTime.Now.ToString());
+                    _logger.LogInformation("[SearchingDevicesService] Service is Running at" + DateTime.Now.ToString());
 
                     await using (context)
                     {
@@ -83,7 +86,7 @@ namespace BlueManager.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    _logger.LogCritical(ex, "There was a problem with searching device service" + DateTime.Now.ToString());
                 }
                 finally
                 {
@@ -111,8 +114,9 @@ namespace BlueManager.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"Error downloading report for HubId: {h.Id} from URL: {url}");
-                    Console.Error.WriteLine(ex);
+                    _logger.LogError(ex, $"Error downloading report for HubId: {h.Id} from URL: {url}");
+                   // Console.Error.WriteLine($"Error downloading report for HubId: {h.Id} from URL: {url}");
+                   // Console.Error.WriteLine(ex);
                     reports.Add(new ReportDownload(h.Id, false, null));
                 }
             }).ToList();
