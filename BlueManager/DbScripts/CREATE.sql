@@ -46,9 +46,13 @@ GO
 
 
 CREATE VIEW ToolLastLocations AS
-SELECT ToolId, HubId, BleName, Timestamp
+SELECT loc.ToolId, loc.HubId, loc.BleName, loc.Timestamp as LocationTimestamp, bat.BatteryState, bat.Timestamp as BatteryReadTimestamp
 FROM (
          SELECT *, ROW_NUMBER() OVER (PARTITION BY p0.ToolId ORDER BY p0.Timestamp DESC) as row
          FROM ToolAtHubs p0
-     ) AS t
-WHERE t.row <= 1
+     ) AS loc
+JOIN (
+    SELECT *, ROW_NUMBER() OVER (PARTITION BY p1.ToolId ORDER BY p1.Timestamp DESC) as row
+    FROM dbo.ToolBatteryReadouts p1
+    ) as bat ON loc.ToolId = bat.ToolId
+WHERE loc.row <= 1 AND bat.row <= 1

@@ -15,6 +15,8 @@
             <th>Lokalizacja</th>
             <th>Adres MAC</th>
             <th>Czas</th>
+            <th>Pomiar baterii</th>
+            <th>Stan baterii</th>
         </tr>
     </thead>
     <tbody>
@@ -25,7 +27,9 @@
                 <td> @Html.DisplayFor(modelItem => item.Tool.ToolName) </td>
                 <td> @Html.DisplayFor(modelItem => item.Hub.LocationName) </td>
                 <td> @Html.DisplayFor(modelItem => item.Tool.MacAddress) </td>
-                <td> @Html.DisplayFor(modelItem => item.Timestamp) </td>
+                <td> @Html.DisplayFor(modelItem => item.LocationTimestamp) </td>
+                <td> @Html.DisplayFor(modelItem => item.BatteryReadTimestamp) </td>
+                <td> @Html.DisplayFor(modelItem => item.BatteryState) </td>
             </tr>
         }
     </tbody>
