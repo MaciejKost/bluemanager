@@ -19,7 +19,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.LocationName)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>             
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -31,6 +35,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LocationName)
+                </td>              
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a> |
@@ -49,7 +56,7 @@
         $('#dt_basic').DataTable({
             aoColumnDefs: [
                 { "aTargets": [0], "bSortable": true },
-                { "aTargets": [2], "bSortable": false },
+                { "aTargets": [3], "bSortable": false },
             ],
             "language": {
                 "sUrl": "lib/bootstrap/dist/js/Polish.json"

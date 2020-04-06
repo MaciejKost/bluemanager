@@ -6,25 +6,17 @@
 @if (@User.Identity.Name != null)
 {
     <li class="nav-item">
-        <a  class="nav-link text-dark">Witaj @User.Identity.Name!</a>
+        <a  class="nav-link text-dark text-capitalize">Witaj @User.Identity.Name!</a>
         @*<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name !, Role @User.FindFirst(claim => claim.Type == System.Security.Claims.ClaimTypes.Role)?.Value</a>*@
         @*Hello @User.Identity.Name !,*@
     </li>
     <li class="nav-item">
-        @*<form  class="form-inline" asp-area="" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>*@
         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Wyloguj</a>
     </li>
 }
 else
 {
     <li class="nav-item">
-          @*<a class="nav-link text-dark" asp-area="" asp-page="/Account/Register">Register</a>*@
-          @*<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>*@
-    </li>
-    <li class="nav-item">
-        @*<a class="nav-link text-dark" asp-area="" asp-page="/Account/Login">Login</a>*@
         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Zaloguj</a>
     </li>
 }

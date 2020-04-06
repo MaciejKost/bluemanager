@@ -101,7 +101,8 @@ namespace BlueManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,IpAddress,LocationName")] Hub hub)
+     //   public async Task<IActionResult> Edit(int id, [Bind("ID,IpAddress,LocationName")] Hub hub)
+        public async Task<IActionResult> Edit(int id, Hub hub)
         {
             if (id != hub.Id)
             {
@@ -166,6 +167,7 @@ namespace BlueManager.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var hub = await _context.Hubs.FindAsync(id);
+           
             _context.Hubs.Remove(hub);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

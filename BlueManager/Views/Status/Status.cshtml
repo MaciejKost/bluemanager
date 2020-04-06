@@ -10,7 +10,21 @@
     <b class="nav-item"> Nieaktywne: </b>
     @foreach (var item in Model)
     {
-        @if (!@item.Status)
+        @if (!@item.IsActive)
+        {
+            <li class="text-warning mx-3">
+                @item.LocationName (@item.IpAddress) : @item.Status.ToString()
+            </li>
+        }
+    }
+</ul>
+<br />
+
+<ul class="list-group ">
+    <b class="nav-item"> Błąd połączenia: </b>
+    @foreach (var item in Model)
+    {
+        @if (!@item.Status & @item.IsActive)
         {
             <li class="text-danger mx-3">
                 @item.LocationName (@item.IpAddress) : @item.Status.ToString()
@@ -21,7 +35,7 @@
 <br />
 
 <ul class="list-group">
-    <b class="nav-item"> Aktywne: </b>
+    <b class="nav-item"> Połączone: </b>
     @foreach (var item in Model)
     {
         @if (@item.Status)

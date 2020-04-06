@@ -4,6 +4,8 @@
     {
         public string IpAddress { get; set; }
         public string LocationName { get; set; }
+        public bool IsActive { get; set; }
+              
         public bool Status { get; set; }
     }
 }

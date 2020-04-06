@@ -10,13 +10,13 @@
 <table id="dt_basic" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
     <thead>
         <tr>
-            <th>Nazwa</th>
-            <th>Nazwa narzędzia</th>
+            <th>Nazwa lokalizatora</th>
+            <th>Numer głowicy</th>
             <th>Lokalizacja</th>
-            <th>Adres MAC</th>
+            <th>Adres MAC lokalizatora</th>
             <th>Czas</th>
-            <th>Pomiar baterii</th>
-            <th>Stan baterii</th>
+            <th>Odczyt stanu baterii</th>
+            <th>Stan baterii w %</th>
         </tr>
     </thead>
     <tbody>
@@ -40,9 +40,7 @@
     <script>
      
             $('#dt_basic').DataTable({
-                aoColumnDefs: [
-                    { "aTargets": [4], "bSortable": true },
-                ],
+               "order": [[ 4, "desc" ]],
                 "language": {
                     "sUrl": "lib/bootstrap/dist/js/Polish.json"
                 }

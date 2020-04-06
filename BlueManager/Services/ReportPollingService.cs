@@ -106,11 +106,18 @@ namespace BlueManager.Services
                // var url = $"http://{h.IpAddress}:8000/";
                 try
                 {
-                   
-                    var reportString = await http.GetStringAsync(url);
-                    var report = JsonConvert.DeserializeObject<HubReport>(reportString);
+                    if (h.IsActive)
+                    {
+                        var reportString = await http.GetStringAsync(url);
+                        var report = JsonConvert.DeserializeObject<HubReport>(reportString);
 
-                    reports.Add(new ReportDownload(h.Id, true, report));
+                        reports.Add(new ReportDownload(h.Id, true, report));
+                    }
+                    else
+                    {
+                        reports.Add(new ReportDownload(h.Id, false, null));
+                    }
+
                 }
                 catch (Exception ex)
                 {

@@ -8,7 +8,8 @@ GO
 CREATE TABLE [Hubs] (
                         [Id] int PRIMARY KEY IDENTITY(1, 1),
                         [LocationName] nvarchar(255),
-                        [IpAddress] nvarchar(255)
+                        [IpAddress] nvarchar(255),
+                        [IsActive] bool
 )
 GO
 
@@ -30,13 +31,13 @@ CREATE TABLE [ToolBatteryReadouts] (
 )
 GO
 
-ALTER TABLE [ToolAtHubs] ADD FOREIGN KEY ([HubId]) REFERENCES [Hubs] ([Id])
+ALTER TABLE [ToolAtHubs] ADD FOREIGN KEY ([HubId]) REFERENCES [Hubs] ([Id]) ON DELETE CASCADE;
 GO
 
-ALTER TABLE [ToolAtHubs] ADD FOREIGN KEY ([ToolId]) REFERENCES [Tools] ([Id])
+ALTER TABLE [ToolAtHubs] ADD FOREIGN KEY ([ToolId]) REFERENCES [Tools] ([Id]) ON DELETE CASCADE;
 GO
 
-ALTER TABLE [ToolBatteryReadouts] ADD FOREIGN KEY ([ToolId]) REFERENCES [Tools] ([Id])
+ALTER TABLE [ToolBatteryReadouts] ADD FOREIGN KEY ([ToolId]) REFERENCES [Tools] ([Id]) ON DELETE CASCADE;
 GO
 
 

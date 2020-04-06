@@ -94,11 +94,10 @@ namespace BlueManagerCore.Controllers
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Locations");
                     }
 
-                    ModelState.AddModelError(string.Empty, "Nieprawidłowe dane logowania");
-
+                    ModelState.AddModelError(string.Empty, "Nieprawidłowe dane logowania");                
                     return View();
 
                 }
@@ -122,7 +121,7 @@ namespace BlueManagerCore.Controllers
         public IActionResult Logout()
         {
             var login = HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Locations");
         }
     }
 }
