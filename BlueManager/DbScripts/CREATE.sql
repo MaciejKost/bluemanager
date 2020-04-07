@@ -9,7 +9,7 @@ CREATE TABLE [Hubs] (
                         [Id] int PRIMARY KEY IDENTITY(1, 1),
                         [LocationName] nvarchar(255),
                         [IpAddress] nvarchar(255),
-                        [IsActive] bool
+                        [IsActive] bit
 )
 GO
 

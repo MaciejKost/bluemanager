@@ -1,0 +1,33 @@
+﻿@model BlueManager.Models.ToolLastLocation
+@{
+    ViewData["Title"] = "SearchTool";
+}
+
+<h2>Znajdź głowicę</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4 align-content-center">
+
+        <form asp-controller="Locations" asp-action="SearchTool">
+            <p>
+                @*Title: <input type="text" name="SearchString">*@
+                <input  type="text" name="SearchString">
+                <input  type="submit" value="Szukaj" />
+            </p>
+        </form>
+    </div>
+</div>
+
+@if (Model != null)
+{
+<h4 class="text-info  mx-3"> Głowica @Model.Tool.ToolName</h4>
+<h4 class="text-info mx-3"> Ostatnia lokalizacja: @Model.Hub.LocationName </h4>
+<h4 class="text-info mx-3"> Czas: @Model.LocationTimestamp </h4>
+}
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

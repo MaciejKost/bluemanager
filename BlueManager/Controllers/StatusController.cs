@@ -33,15 +33,15 @@ namespace BlueManager.Controllers
 
         public async Task<IActionResult> Status()
         {        
-            var Messages = new List<string>();
+            //var Messages = new List<string>();
             var statusList = new List<CheckReport>();
             var report = await _health.CheckHealthAsync();
 
             foreach (var item in report.Entries["Hubs"].Data)
             {
-                var ipAddress = item.Key;
-                var status = (CheckReport)item.Value;
-                Messages.Add($"{status.LocationName}.({status.IpAddress}) : {status.Status.ToString()}.");
+                //var ipAddress = item.Key;
+                //var status = (CheckReport)item.Value;
+                //Messages.Add($"{status.LocationName}.({status.IpAddress}) : {status.Status.ToString()}.");
                 statusList.Add((CheckReport)item.Value);
             }
            

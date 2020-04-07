@@ -1,4 +1,6 @@
-﻿namespace BlueManager.Services.Model
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+
+namespace BlueManager.Services.Model
 {
     public class CheckReport
     {
@@ -7,5 +9,6 @@
         public bool IsActive { get; set; }
               
         public bool Status { get; set; }
+        public HealthStatus HealthStatus { get; set; }
     }
 }

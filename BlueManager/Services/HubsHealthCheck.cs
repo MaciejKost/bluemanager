@@ -30,12 +30,13 @@ namespace BlueManager
             var hubs = await _context.Hubs.ToListAsync(cancellationToken);
 
             var hubsHealth = new Dictionary<string, CheckReport>();
+           
             //var hubsHealth = new List<CheckReport>();
             foreach (var hub in hubs)
             {
-               
-                    try
-                    {
+
+                try
+                {
                     if (hub.IsActive)
                     {
                         using (var http = new HttpClient())
@@ -43,35 +44,33 @@ namespace BlueManager
                             http.Timeout = TimeSpan.FromSeconds(2);
                             var response = await http.SendAsync(new HttpRequestMessage(HttpMethod.Head, hub.GetUrl()), cancellationToken);
                             response.EnsureSuccessStatusCode();
-                            //  hubsHealth.Add(hub.IpAddress, true);
-                            hubsHealth.Add(hub.IpAddress, new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, IsActive = hub.IsActive, Status = true });
-                            // hubsHealth.Add(new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, Status = true });
+                            hubsHealth.Add(hub.IpAddress, new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, IsActive = hub.IsActive, HealthStatus = HealthStatus.Healthy});
+
                         }
                     }
                     else
                     {
-                        _logger.LogWarning("Hub {IP}({Location}) is not active at {Time}", hub.IpAddress, hub.LocationName, DateTime.Now);           
-                        hubsHealth.Add(hub.IpAddress, new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, IsActive = hub.IsActive, Status = false });
+                        _logger.LogWarning("Hub {IP}({Location}) is not active at {Time}", hub.IpAddress, hub.LocationName, DateTime.Now);
+                        hubsHealth.Add(hub.IpAddress, new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, IsActive = hub.IsActive, HealthStatus = HealthStatus.Degraded });
 
                     }
 
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning(ex, "Problem connection to server {IP}({Location}) at {Time}", hub.IpAddress, hub.LocationName, DateTime.Now);
-                        //hubsHealth.Add(hub.IpAddress, false);
-                        hubsHealth.Add(hub.IpAddress, new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, IsActive = hub.IsActive, Status = false });
-                        //  hubsHealth.Add(new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, Status = false });
-                    }
-                
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Problem connection to server {IP}({Location}) at {Time}", hub.IpAddress, hub.LocationName, DateTime.Now);                
+                    hubsHealth.Add(hub.IpAddress, new CheckReport() { IpAddress = hub.IpAddress, LocationName = hub.LocationName, IsActive = hub.IsActive, HealthStatus = HealthStatus.Unhealthy});
+                   }
+
 
             }
-
+            
             return new HealthCheckResult(
-                hubsHealth.Values.All(x => x.Status) ? HealthStatus.Healthy : HealthStatus.Unhealthy,
-                "Description",
+                hubsHealth.OrderBy(x => x.Value.HealthStatus).FirstOrDefault().Value.HealthStatus,
+                //hubsHealth.Values.All(x => x.Status) ? HealthStatus.Healthy : HealthStatus.Unhealthy,
+                "Some problem conntecting to servers",
                 null,
-                hubsHealth.ToDictionary(k => k.Key, v => (object) v.Value)
+                hubsHealth.ToDictionary(k => k.Key, v => (object)v.Value)
             );
         }
     }

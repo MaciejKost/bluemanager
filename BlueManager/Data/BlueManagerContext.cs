@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using BlueManagerPlatform.Models;
 using BlueManager.Models;
 
 namespace BlueManager.Data

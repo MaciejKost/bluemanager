@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlueManagerPlatform.Models
+namespace BlueManager.Models
 {
     public class ToolBatteryReadout
     {

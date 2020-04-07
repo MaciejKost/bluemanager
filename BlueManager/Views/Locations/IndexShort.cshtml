@@ -1,0 +1,40 @@
+﻿@model List<ToolLastLocation>
+
+@{
+    ViewBag.Title = "Lokalizacja";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table id="dt_basic" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Numer głowicy</th>
+            <th>Lokalizacja</th>
+            <th>Czas</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td> @Html.DisplayFor(modelItem => item.Tool.ToolName) </td>
+                <td> @Html.DisplayFor(modelItem => item.Hub.LocationName) </td>
+                <td> @Html.DisplayFor(modelItem => item.LocationTimestamp) </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script src="~/lib/bootstrap/dist/js/datatables.min.js"></script>
+    <script>
+
+            $('#dt_basic').DataTable({
+               "order": [[ 2, "desc" ]],
+                "language": {
+                    "sUrl": "lib/bootstrap/dist/js/Polish.json"
+                }
+            });
+
+    </script>
+}

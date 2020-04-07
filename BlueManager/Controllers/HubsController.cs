@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlueManager.Data;
-using BlueManagerPlatform.Models;
+using BlueManager.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BlueManager.Controllers

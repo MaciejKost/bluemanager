@@ -1,5 +1,4 @@
 ﻿using System;
-using BlueManagerPlatform.Models;
 
 namespace BlueManager.Models
 {

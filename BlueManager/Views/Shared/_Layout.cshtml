@@ -26,17 +26,24 @@
                 @*<a href="#" data-toggle="popover" data-trigger="click" class="navbar-brand">BlueManager</a>*@
                 @*<a href="#" id="popoverNavLink" class="navbar-brand">BlueManager</a>*@
 
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                @*<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">*@
+                <div class="navbar-expand d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="Index">Lokalizacja</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="IndexShort">Lokalizacja uproszczona</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Tools" asp-action="Index">Narzędzia</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Hubs" asp-action="Index">Koncentratory</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="SearchTool">Znajdź</a>
                         </li>
                     </ul>
                 </div>

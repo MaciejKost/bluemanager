@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BlueManager.Data;
 using BlueManager.Services.Model;
-using BlueManagerPlatform.Models;
+using BlueManager.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
