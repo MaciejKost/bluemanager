@@ -6,18 +6,12 @@
 
 <h1>Edytuj</h1>
 
-@*<h4>Tool</h4>*@
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            @*<div class="form-group">
-            <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>*@
             <div class="form-group">
                 <label asp-for="ToolName" class="control-label"></label>
                 <input asp-for="ToolName" class="form-control" />
@@ -28,19 +22,7 @@
                 <input asp-for="MacAddress" class="form-control" style="text-transform:uppercase;" />
                 <span asp-validation-for="MacAddress" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-            <label asp-for="Location" class="control-label"></label>
-            <input asp-for="Location" class="form-control" />
-            <span asp-validation-for="Location" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Time" class="control-label"></label>
-            <input asp-for="Time" class="form-control" />
-            <span asp-validation-for="Time" class="text-danger"></span>
-        </div>*@
-            <div class="col-md-12">
-                @Html.ValidationSummary(true, string.Empty, new { @class = "invalid-feedback d-block" })
-            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input type="submit" value="Zapisz" class="btn btn-primary" />
             </div>

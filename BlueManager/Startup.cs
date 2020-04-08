@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using BlueManager.Localization.Resources;
 using HealthChecks.UI.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System;
+
 
 namespace BlueManager
 {
@@ -62,6 +64,11 @@ namespace BlueManager
             services.AddHealthChecksUI();
 
             services.AddSingleton<IHostedService, ReportPollingService>();
+
+            // Note .AddMiniProfiler() returns a IMiniProfilerBuilder for easy intellisense
+            services.AddMiniProfiler()
+                    .AddEntityFramework();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +77,7 @@ namespace BlueManager
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseMiniProfiler();
             }
             else
             {
@@ -94,7 +102,13 @@ namespace BlueManager
             app.UseHealthChecks("/health", new HealthCheckOptions()
             {
                 Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+                ResultStatusCodes =
+                    {
+                      [HealthStatus.Healthy] = StatusCodes.Status200OK,
+                      [HealthStatus.Degraded] = StatusCodes.Status200OK,
+                      [HealthStatus.Unhealthy] = StatusCodes.Status200OK,
+                 }
             });
 
             app.UseHealthChecksUI();
@@ -105,6 +119,9 @@ namespace BlueManager
                     name: "default",
                     pattern: "{controller=Locations}/{action=Index}/{id?}");
             });
+
+
+
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model List<CheckReport>
+﻿@model List<HubData>
 @using Microsoft.Extensions.Diagnostics.HealthChecks
 @{
     ViewData["Title"] = "Status";
@@ -11,11 +11,11 @@
     <b class="nav-item"> Nieaktywne: </b>
     @foreach (var item in Model)
     {
-        @if (@item.HealthStatus == HealthStatus.Degraded)
+    @if (@item.HealthStatus == "Degraded")
         {
-            <li class="text-warning mx-3">
-                @item.LocationName (@item.IpAddress) : @item.HealthStatus.ToString();
-            </li>
+    <li class="text-warning mx-3">
+        @item.LocationName (@item.IpAddress) : @item.HealthStatus.ToString();
+    </li>
         }
     }
 </ul>
@@ -25,12 +25,11 @@
     <b class="nav-item"> Błąd połączenia: </b>
     @foreach (var item in Model)
     {
-        @*@if (!@item.Status & @item.IsActive)*@
-        @if (@item.HealthStatus == HealthStatus.Unhealthy)
+    @if (@item.HealthStatus == "Unhealthy")
         {
-<li class="text-danger mx-3">
-    @item.LocationName (@item.IpAddress) : @item.HealthStatus.ToString();
-</li>
+    <li class="text-danger mx-3">
+        @item.LocationName (@item.IpAddress) : @item.HealthStatus.ToString();
+    </li>
         }
     }
 </ul>
@@ -40,11 +39,11 @@
     <b class="nav-item"> Połączone: </b>
     @foreach (var item in Model)
     {
-        @if (@item.HealthStatus == HealthStatus.Healthy)
+    @if (@item.HealthStatus == "Healthy")
         {
-<li class="text-success mx-3">
-    @item.LocationName (@item.IpAddress) : @item.HealthStatus.ToString()
-</li>
+    <li class="text-success mx-3">
+        @item.LocationName (@item.IpAddress) : @item.HealthStatus.ToString()
+    </li>
         }
     }
 </ul>

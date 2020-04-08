@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlueManager.Data;
 using BlueManager.Models;
@@ -56,19 +55,19 @@ namespace BlueManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ToolName,MacAddress,Location,Time")] Tool tool)
+       // public async Task<IActionResult> Create([Bind("Id,Name,ToolName,MacAddress,Location,Time")] Tool tool)
+        public async Task<IActionResult> Create(Tool tool)
         {
             if (ModelState.IsValid)
             {
                 tool = Trim(tool);
                 if (MacExists(tool.MacAddress) == true)
                 {
-                    ViewBag.Error = "Narzędzie o takim adresie MAC już istnieje";
+                    ModelState.AddModelError(string.Empty, "Narzędzie o takim adresie MAC już istnieje");
                     return View(tool);
                 }
                 else
                 {
-                    ViewBag.Error = "";
                     _context.Add(tool);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -98,7 +97,7 @@ namespace BlueManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ToolName,MacAddress,Location,Time")] Tool tool)
+        public async Task<IActionResult> Edit(int id, Tool tool)
         {
             if (id != tool.Id)
             {
@@ -112,13 +111,11 @@ namespace BlueManager.Controllers
                     tool = Trim(tool);
                     if (CanEdit(tool))
                     {
-                        // ViewBag.Error = "Narzędzie o takim adresie MAC już istnieje";
                         ModelState.AddModelError(string.Empty, "Narzędzie o takim adresie MAC już istnieje");
                         return View(tool);
                     }
                     else
                     {
-                        ViewBag.Error = "";
                         _context.Update(tool);
                         await _context.SaveChangesAsync();
                     }

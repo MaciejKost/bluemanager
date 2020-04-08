@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using BlueManager.Data;
 using BlueManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 
 namespace BlueManager.Controllers
@@ -27,7 +24,6 @@ namespace BlueManager.Controllers
 
         public async Task<IActionResult> Index(CancellationToken cancellationToken = new CancellationToken())
         {
-
             List<ToolLastLocation> toolLastLocations;
             await using (_context)
             {
@@ -49,7 +45,6 @@ namespace BlueManager.Controllers
 
         public async Task<IActionResult> IndexShort(CancellationToken cancellationToken = new CancellationToken())
         {
-
             List<ToolLastLocation> toolLastLocations;
             await using (_context)
             {
@@ -76,13 +71,11 @@ namespace BlueManager.Controllers
             {
                 try
                 {
-
-                        toolLastLocation = await _context.ToolLastLocations
-                          .Include(x => x.Tool)
-                          .Include(x => x.Hub)
-                          .Where(x => x.Tool.ToolName.Contains(searchString))
-                          .FirstOrDefaultAsync(cancellationToken);
-                
+                    toolLastLocation = await _context.ToolLastLocations
+                      .Include(x => x.Tool)
+                      .Include(x => x.Hub)
+                      .Where(x => x.Tool.ToolName.Contains(searchString))
+                      .FirstOrDefaultAsync(cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -90,7 +83,7 @@ namespace BlueManager.Controllers
                     throw;
                 }
             }
-           
+
             return View(toolLastLocation);
         }
     }

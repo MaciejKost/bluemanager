@@ -8,26 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BlueManager</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    @*<link rel="stylesheet" href="~/lib/jquery/d" />*@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/dataTables.bootstrap4.min.css" />
 
 </head>
-@{
-    var health = await HealthCheckService.CheckHealthAsync();
-    var icon = health.Status == HealthStatus.Unhealthy ? "database_red.png" : "database_green.png";
-    var connClass = health.Status == HealthStatus.Unhealthy ? "text-denger" : "";
-}
 <body>
+    <mini-profiler />
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a href="#" id="popoverNavLink" class="navbar-brand @connClass">BlueManager</a>
-                @*<a href="#" data-toggle="popover" data-trigger="click" class="navbar-brand">BlueManager</a>*@
-                @*<a href="#" id="popoverNavLink" class="navbar-brand">BlueManager</a>*@
-
-                @*<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">*@
-                <div class="navbar-expand d-sm-inline-flex flex-sm-row-reverse">
+                <a href="#" id="popoverNavLink" class="navbar-brand ">BlueManager</a>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
@@ -95,19 +86,6 @@
             });
         };
 
-        window.setInterval(function () {
-       
-            //    updateStatus();
-            //    alert('<%=Session["UserName"] %>');
-            //    var username = '<%= Session["UserName"] %>';
-                //    alert(username );
-            //    $.ajax({
-                    //        url: '/Status/Status',
-                    //        success: function (result) {
-                    //            var test = result;
-                    //        }
-                    //    });
-                }, 5000)
     </script>
 
 

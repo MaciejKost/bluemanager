@@ -16,14 +16,13 @@ namespace BlueManager.Controllers
     {
         private readonly BlueManagerContext _context;
      
-
         public HubsController(BlueManagerContext context)
         {
             _context = context;
         }
 
         // GET: Hubs
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index()
         {
             var hubsList = await _context.Hubs.ToListAsync();
             return View(hubsList);
@@ -58,19 +57,18 @@ namespace BlueManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,IpAddress,LocationName")] Hub hub)
+        public async Task<IActionResult> Create(Hub hub)
         {
             if (ModelState.IsValid)
             {
                 hub = Trim(hub);
                 if (IpExists(hub.IpAddress) == true)
                 {
-                    ViewBag.Error = "Koncentrator o takim adresie IP już istnieje";
+                    ModelState.AddModelError(string.Empty, "Koncentrator o takim adresie IP już istnieje");
                     return View(hub);
                 }
                 else
-                {
-                    ViewBag.Error = "";
+                {                    
                     _context.Add(hub);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -101,7 +99,6 @@ namespace BlueManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-     //   public async Task<IActionResult> Edit(int id, [Bind("ID,IpAddress,LocationName")] Hub hub)
         public async Task<IActionResult> Edit(int id, Hub hub)
         {
             if (id != hub.Id)
@@ -116,12 +113,11 @@ namespace BlueManager.Controllers
                     hub = Trim(hub);
                     if (CanEdit(hub) == true)
                     {
-                        ViewBag.Error = "Koncentrator o takim adresie IP już istnieje";
+                        ModelState.AddModelError(string.Empty, "Koncentrator o takim adresie IP już istnieje");
                         return View(hub);
                     }
                     else
-                    {     
-                        ViewBag.Error = "";                  
+                    {                      
                         _context.Update(hub);
                         await _context.SaveChangesAsync();
                     }
@@ -166,8 +162,7 @@ namespace BlueManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var hub = await _context.Hubs.FindAsync(id);
-           
+            var hub = await _context.Hubs.FindAsync(id);           
             _context.Hubs.Remove(hub);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

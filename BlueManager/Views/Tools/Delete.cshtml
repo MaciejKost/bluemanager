@@ -8,15 +8,8 @@
 
 <h3>Czy na pewno chcesz usunąć narzędzie?</h3>
 <div>
-    @*<h4>Tool</h4>*@
     <hr />
     <dl class="row">
-        @*<dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>*@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ToolName)
         </dt>
@@ -29,18 +22,6 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.MacAddress)
         </dd>
-        @*<dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Time)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Time)
-        </dd>*@
     </dl>
     
     <form asp-action="Delete">
