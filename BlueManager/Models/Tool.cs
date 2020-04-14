@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BlueManager.Models
 {
@@ -9,7 +6,7 @@ namespace BlueManager.Models
     {
         public int Id { get; set; }
 
-
+        [Required(ErrorMessage = "required")]
         [Display(Name = "Numer głowicy")]
         public string ToolName { get; set; }
 

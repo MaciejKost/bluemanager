@@ -1,5 +1,6 @@
 ﻿@using Microsoft.Extensions.Diagnostics.HealthChecks;
-@inject HealthCheckService HealthCheckService;
+@using System.Collections.Generic;
+@using BlueManager.Services.Model;
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,87 +8,181 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BlueManager</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/dataTables.bootstrap4.min.css" />
-
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 </head>
-<body>
-    <mini-profiler />
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a href="#" id="popoverNavLink" class="navbar-brand ">BlueManager</a>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+<body class="hold-transition sidebar-mini sidebar-collapse">
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a id="popoverNavLink" class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        @*<span id="hub_nav" class="badge badge-warning navbar-badge">0</span>*@
+                        <span id="hub_nav" class="badge badge-danger navbar-badge">0</span>
+                    </a>
+                    <div id="status-dropdown" class="dropdown-menu dropdown-menu-lg dropdown-menu-right px-3 py-3 ">
+
+                    </div>
+                </li>
+                <!-- Login -->
+                <li class="nav-item">
                     <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="" class="brand-link">
+                <img src="../../dist/img/BlueManagerLogo.png"
+                     alt="BlueManager Logo"
+                     class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">BlueManager</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="Index">Lokalizacja</a>
+                            <a class="nav-link" asp-area="" asp-controller="Locations" asp-action="Index">
+                                <i class="nav-icon fas fa-microchip"></i>
+                                <p>
+                                    Lokalizacja
+                                </p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="IndexShort">Lokalizacja uproszczona</a>
+                            <a class="nav-link" asp-area="" asp-controller="Locations" asp-action="IndexShort">
+                                <i class="nav-icon fas fa-handshake"></i>
+                                <p>
+                                    Uproszczona lokalizacja
+                                </p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Tools" asp-action="Index">Narzędzia</a>
+                            <a class="nav-link" asp-area="" asp-controller="Locations" asp-action="SearchTool">
+                                <i class="nav-icon fab fa-chrome"></i>
+                                <p>
+                                    Szukaj narzędzia
+                                </p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Hubs" asp-action="Index">Koncentratory</a>
+                            <a class="nav-link" asp-area="" asp-controller="Tools" asp-action="Index">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>
+                                    Narzędzia
+                                </p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="SearchTool">Znajdź</a>
+                            <a class="nav-link" asp-area="" asp-controller="Hubs" asp-action="Index">
+                                <i class="nav-icon far fa-calendar-alt"></i>
+                                <p>
+                                    Koncentratory
+                                </p>
+                            </a>
                         </li>
                     </ul>
-                </div>
+                </nav>
+                <!-- /.sidebar-menu -->
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
     </div>
-    <br />
-    <br />
-    <br />
 
 
-    <script src="~/lib/bootstrap/dist/js/jquery-3.3.1.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="../../dist/js/demo.js"></script>
     @RenderSection("Scripts", required: false)
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
         $(function () {
             updateStatus();
+            setInterval(fiveSecondFunction, 5000);
         });
 
         $("#popoverNavLink").click(updateStatus);
-
-        $.ajax({
-            success: function () {
-                $('#popoverNavLink').popover({
-                    content: '',
-                    trigger: 'click',
-                    html: true,
-                    animation: false
-                })
-            }
-        });
 
         function updateStatus() {
             $.ajax({
                 url: '/Status/Status',
                 success: function (result) {
-                    $("#popoverNavLink").attr("data-content", result)
+                    $("#status-dropdown").html(result)
                 }
             });
         };
 
+        function fiveSecondFunction() {
+            $.ajax({
+                type: 'GET',
+                url: '/Status/GetStatus',
+                success: function (result) {
+                    $("#hub_nav").html(0);
+                    if (result.error != 0) {
+                        $("#hub_nav").html(result.error);
+                        $("hub.nav").addClass('badge-error')
+                    } else if (result.notActive != 0) {
+                        $("#hub_nav").html(result.notActive);
+                         $("hub.nav").addClass('badge-warning')
+                    }
+                    else {
+                        $("#hub_nav").html(0);
+                    }
+                }
+            });
+        }
+
     </script>
 
-
+    @*<mini-profiler />*@
 </body>
 </html>
