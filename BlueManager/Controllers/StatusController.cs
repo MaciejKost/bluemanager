@@ -6,48 +6,47 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using StackExchange.Profiling;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BlueManager.Controllers
 {
     public class StatusController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<StatusController> _logger;
+        private readonly IMemoryCache _cache;
         public static int errorNr;
         public static int notActiveNr;
 
-        public List<string> Messages { get; set; }
-        public StatusController(IHttpClientFactory httpClientFactory, ILogger<StatusController> logger)
-        {        
-            _httpClientFactory = httpClientFactory;
+
+        public StatusController(ILogger<StatusController> logger, IMemoryCache memoryCache)
+
+        {
             _logger = logger;
+            _cache = memoryCache;
         }
         public IActionResult Index()
         {
             return View();
         }
 
-        public async Task<IActionResult> Status()
+        public IActionResult Status()
         {
-            var statusList = new List<HubData>();
-            var url = "https://localhost:5001/health";
+            var statusList = new List<CheckReport>();
+
             try
             {
-                using var http = _httpClientFactory.CreateClient();
-                http.Timeout = TimeSpan.FromMilliseconds(5000);               
-                var reportString = await http.GetStringAsync(url);
-                var report = JsonConvert.DeserializeObject<HealthSystemReport>(reportString);
+                var report = _cache.Get<Dictionary<string, CheckReport>>(CacheKeys.Entry);
                 notActiveNr = 0;
                 errorNr = 0;
-                foreach (var item in report.entries.Hubs.Data.Values)
+                foreach (var item in report.Values)
                 {
-                     statusList.Add(item);
-                    if (item.HealthStatus == "Degraded")
+                    statusList.Add(item);
+                    if (!item.IsActive)
                     {
                         notActiveNr++;
                     }
-                    else if (item.HealthStatus == "Unhealthy")
+                    else if (!item.Status)
                     {
                         errorNr++;
                     }
@@ -55,19 +54,52 @@ namespace BlueManager.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogCritical(ex, $"Error downloading report for HubId: from URL: {url}");
+                _logger.LogError(ex, $"Error cache reading");
             }
 
             return View(statusList);
         }
 
-        public ActionResult GetStatus()
+        public JsonResult Status2()
         {
-     
+            var statusList = new List<CheckReport>();
+            StatusRaport sts;
 
-            return Json(new { notActive = notActiveNr, error = errorNr });
+            try
+            {
+                var report = _cache.Get<Dictionary<string, CheckReport>>(CacheKeys.Entry);
+                notActiveNr = 0;
+                errorNr = 0;
+                foreach (var item in report.Values)
+                {
+                    statusList.Add(item);
+                    if (!item.IsActive)
+                    {
+                        notActiveNr++;
+                    }
+                    else if (!item.Status)
+                    {
+                        errorNr++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error cache reading");
+            }
 
+            sts = new StatusRaport() { Error = errorNr, NotActive = notActiveNr, StatusList = statusList };
+
+            return Json(sts);
         }
+
+    }
+
+    public class StatusRaport
+    {
+        public int NotActive { get; set; }
+        public int Error { get; set; }
+        public List<CheckReport> StatusList { get; set; }
     }
 }
 

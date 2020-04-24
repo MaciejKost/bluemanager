@@ -6,9 +6,7 @@ namespace BlueManager.Services.Model
     {
         public string IpAddress { get; set; }
         public string LocationName { get; set; }
-        public bool IsActive { get; set; }
-              
+        public bool IsActive { get; set; }              
         public bool Status { get; set; }
-        public HealthStatus HealthStatus { get; set; }
     }
 }

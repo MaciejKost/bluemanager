@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Caching.Memory;
+using BlueManager.Controllers;
 
 namespace BlueManager.Services
 {
@@ -24,13 +26,17 @@ namespace BlueManager.Services
         private readonly ReportPollingConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILogger<ReportPollingService> _logger;
+        private readonly IMemoryCache _cache;
 
-        public ReportPollingService(IServiceScopeFactory scopeFactory, IOptions<ReportPollingConfiguration> opt, IHttpClientFactory httpClientFactory, ILogger<ReportPollingService> logger)
+
+        public ReportPollingService(IServiceScopeFactory scopeFactory, IOptions<ReportPollingConfiguration> opt, IHttpClientFactory httpClientFactory, ILogger<ReportPollingService> logger, IMemoryCache memoryCache)
+        //public ReportPollingService(IServiceScopeFactory scopeFactory, IOptions<ReportPollingConfiguration> opt, ILogger<ReportPollingService> logger, IMemoryCache memoryCache)
         {
             _scopeFactory = scopeFactory;
             _configuration = opt.Value;
             _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _cache = memoryCache;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -41,6 +47,7 @@ namespace BlueManager.Services
                 {
                     using var scope = _scopeFactory.CreateScope();
                     var context = scope.ServiceProvider.GetRequiredService<BlueManagerContext>();
+           
 
                     _logger.LogInformation("[SearchingDevicesService] Service is Running at" + DateTime.Now.ToString());
 
@@ -96,11 +103,15 @@ namespace BlueManager.Services
 
         private async Task<IEnumerable<ReportDownload>> GetReportsAsync(IEnumerable<Hub> hubs)
         {
-            var reports = new ConcurrentBag<ReportDownload>();
-            var downloads = hubs.Select(async h =>
+            //using var scope = _scopeFactory.CreateScope();
+           // var _httpClientFactory = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>();
+            var cacheEntry = new Dictionary<string, CheckReport> ();
+            var reports = new ConcurrentBag<ReportDownload>();         
+              var downloads = hubs.Select(async h =>
             {
                 using var http = _httpClientFactory.CreateClient();
                 http.Timeout = TimeSpan.FromMilliseconds(_configuration.PollingRequestTimeout);
+                http.DefaultRequestHeaders.Add("timestamp", ((Int32)(DateTime.UtcNow.ToLocalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString());
                 var url = h.GetUrl();
                 try
                 {
@@ -109,21 +120,27 @@ namespace BlueManager.Services
                         var reportString = await http.GetStringAsync(url);
                         var report = JsonConvert.DeserializeObject<HubReport>(reportString);
                         reports.Add(new ReportDownload(h.Id, true, report));
+                        cacheEntry.Add(h.IpAddress, new CheckReport() { IpAddress = h.IpAddress, LocationName = h.LocationName, Status = true, IsActive = h.IsActive});
                     }
                     else
                     {
                         reports.Add(new ReportDownload(h.Id, false, null));
+                        cacheEntry.Add(h.IpAddress, new CheckReport() { IpAddress = h.IpAddress, LocationName = h.LocationName, Status = false, IsActive = h.IsActive});
                     }
 
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, $"Error downloading report for HubId: {h.Id} from URL: {url}");
+                    cacheEntry.Add(h.IpAddress, new CheckReport() { IpAddress = h.IpAddress, LocationName = h.LocationName, Status= false, IsActive = h.IsActive});
                     reports.Add(new ReportDownload(h.Id, false, null));
                 }
             }).ToList();
 
             await Task.WhenAll(downloads);
+
+              _cache.Remove(CacheKeys.Entry);
+              _cache.Set(CacheKeys.Entry, cacheEntry);
 
             return reports.ToList();
         }

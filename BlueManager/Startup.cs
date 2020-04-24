@@ -57,12 +57,7 @@ namespace BlueManager
                     };
                 });
 
-
-            services.AddHealthChecks()
-                .AddSqlServer(Configuration["ConnectionStrings:BlueManagerContext"])
-                .AddCheck<HubsHealthCheck>("Hubs", HealthStatus.Degraded);
-            services.AddHealthChecksUI();
-
+            services.AddHttpClient<ReportPollingService>();
             services.AddSingleton<IHostedService, ReportPollingService>();
 
             // Note .AddMiniProfiler() returns a IMiniProfilerBuilder for easy intellisense
@@ -91,27 +86,9 @@ namespace BlueManager
 
             app.UseRouting();
 
-            // app.UseCookiePolicy();
-            // app.UseAuthorization();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //  app.UseHealthChecks("/hc");
-
-            app.UseHealthChecks("/health", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
-                ResultStatusCodes =
-                    {
-                      [HealthStatus.Healthy] = StatusCodes.Status200OK,
-                      [HealthStatus.Degraded] = StatusCodes.Status200OK,
-                      [HealthStatus.Unhealthy] = StatusCodes.Status200OK,
-                 }
-            });
-
-            app.UseHealthChecksUI();
 
             app.UseEndpoints(endpoints =>
             {

@@ -10,6 +10,6 @@ namespace BlueManager.Services
         /// <summary>
         /// Timeout for a single request to Hub
         /// </summary>
-        public double PollingRequestTimeout { get; set; } = 2000;
+        public double PollingRequestTimeout { get; set; } = 10000;
     }
 }

@@ -6,20 +6,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BlueManager.Models;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BlueManager.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMemoryCache _cache;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMemoryCache memoryCache)
         {
             _logger = logger;
+            _cache = memoryCache;
         }
 
+    
         public IActionResult Index()
         {
+          
             return View();
         }
 
@@ -34,4 +39,5 @@ namespace BlueManager.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
+
 }

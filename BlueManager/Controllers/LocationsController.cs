@@ -24,22 +24,24 @@ namespace BlueManager.Controllers
 
         public async Task<IActionResult> Index(CancellationToken cancellationToken = new CancellationToken())
         {
-            List<ToolLastLocation> toolLastLocations;
-            await using (_context)
+           var toolLastLocations = new List<ToolLastLocation>() ;
+
+            try
             {
-                try
+                await using (_context)
                 {
                     toolLastLocations = await _context.ToolLastLocations
-                        .Include(x => x.Tool)
-                        .Include(x => x.Hub)
-                        .ToListAsync(cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogCritical(ex, "There was a problem with database at {Time}", DateTime.Now);
-                    throw;
+                         .Include(x => x.Tool)
+                         .Include(x => x.Hub)
+                           .ToListAsync(cancellationToken);
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.LogCritical(ex, "There was a problem with database at {Time}", DateTime.Now);
+                throw;
+            }
+
             return View(toolLastLocations);
         }
 
@@ -74,7 +76,7 @@ namespace BlueManager.Controllers
                     toolLastLocation = await _context.ToolLastLocations
                       .Include(x => x.Tool)
                       .Include(x => x.Hub)
-                      .Where(x => x.Tool.ToolName.Contains(searchString))
+                      .Where(x => x.Tool.ToolName == searchString)
                       .FirstOrDefaultAsync(cancellationToken);
                 }
                 catch (Exception ex)

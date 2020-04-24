@@ -31,6 +31,14 @@ CREATE TABLE [ToolBatteryReadouts] (
 )
 GO
 
+CREATE TABLE [dbo].[login] (
+    [Id]       INT            IDENTITY (1, 1) NOT NULL,
+    [username] NVARCHAR (255) NULL,
+    [password] NVARCHAR (255) NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+
 ALTER TABLE [ToolAtHubs] ADD FOREIGN KEY ([HubId]) REFERENCES [Hubs] ([Id]) ON DELETE CASCADE;
 GO
 

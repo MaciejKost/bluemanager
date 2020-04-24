@@ -1,5 +1,4 @@
-﻿@model List<HubData>
-@using Microsoft.Extensions.Diagnostics.HealthChecks
+﻿@model List<CheckReport>
 @{
     ViewData["Title"] = "Status";
     Layout = null;
@@ -11,10 +10,10 @@
     <b class="nav-item"> Nieaktywne: </b>
     @foreach (var item in Model)
     {
-    @if (@item.HealthStatus == "Degraded")
+    @if (!@item.IsActive)
         {
     <li class="text-warning mx-3">
-        @item.LocationName (@item.IpAddress) : @item.HealthStatus.ToString();
+        @item.LocationName (@item.IpAddress)
     </li>
         }
     }
@@ -25,10 +24,10 @@
     <b class="nav-item"> Błąd połączenia: </b>
     @foreach (var item in Model)
     {
-    @if (@item.HealthStatus == "Unhealthy")
+    @if (@item.IsActive & !@item.Status)
         {
     <li class="text-danger mx-3">
-        @item.LocationName (@item.IpAddress) : @item.HealthStatus.ToString();
+        @item.LocationName (@item.IpAddress)
     </li>
         }
     }
@@ -39,10 +38,10 @@
     <b class="nav-item"> Połączone: </b>
     @foreach (var item in Model)
     {
-    @if (@item.HealthStatus == "Healthy")
+    @if (@item.IsActive & @item.Status)
         {
     <li class="text-success mx-3">
-        @item.LocationName (@item.IpAddress) : @item.HealthStatus.ToString()
+        @item.LocationName (@item.IpAddress) 
     </li>
         }
     }

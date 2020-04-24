@@ -5,7 +5,7 @@ namespace BlueManager.Services.Model
 {
     public class HubReport
     {
-        [JsonProperty("BLE_Devices")]
+        [JsonProperty("dev_corrected")]
         public List<DeviceReport> Devices { get; set; }
     }
 }

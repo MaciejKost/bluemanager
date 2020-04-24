@@ -67,7 +67,7 @@
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Locations" asp-action="Index">
-                                <i class="nav-icon fas fa-microchip"></i>
+                                <i class="nav-icon fas fa-map-marker"></i>
                                 <p>
                                     Lokalizacja
                                 </p>
@@ -75,7 +75,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Locations" asp-action="IndexShort">
-                                <i class="nav-icon fas fa-handshake"></i>
+                                <i class="nav-icon fas fa-crosshairs"></i>
                                 <p>
                                     Uproszczona lokalizacja
                                 </p>
@@ -83,7 +83,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Locations" asp-action="SearchTool">
-                                <i class="nav-icon fab fa-chrome"></i>
+                                <i class="nav-icon fas fa-search"></i>
                                 <p>
                                     Szukaj narzędzia
                                 </p>
@@ -91,7 +91,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Tools" asp-action="Index">
-                                <i class="nav-icon fas fa-file-alt"></i>
+                                <i class="nav-icon fas fa-wrench"></i>
                                 <p>
                                     Narzędzia
                                 </p>
@@ -99,7 +99,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Hubs" asp-action="Index">
-                                <i class="nav-icon far fa-calendar-alt"></i>
+                                <i class="nav-icon fas fa-sitemap"></i>
                                 <p>
                                     Koncentratory
                                 </p>
@@ -147,7 +147,7 @@
     <script type="text/javascript">
         $(function () {
             updateStatus();
-            setInterval(fiveSecondFunction, 5000);
+            setInterval(oneSecondFunction, 1000);
         });
 
         $("#popoverNavLink").click(updateStatus);
@@ -161,18 +161,19 @@
             });
         };
 
-        function fiveSecondFunction() {
+        function oneSecondFunction() {
             $.ajax({
                 type: 'GET',
-                url: '/Status/GetStatus',
+                url: '/Status/Status2',
                 success: function (result) {
                     $("#hub_nav").html(0);
                     if (result.error != 0) {
                         $("#hub_nav").html(result.error);
-                        $("hub.nav").addClass('badge-error')
+                       // $("hub.nav").addClass('badge-error')
+                        $("hub.nav").removeClass('badge-error')
                     } else if (result.notActive != 0) {
                         $("#hub_nav").html(result.notActive);
-                         $("hub.nav").addClass('badge-warning')
+                         $("hub.nav").removeClass('badge-warning')
                     }
                     else {
                         $("#hub_nav").html(0);
@@ -183,6 +184,6 @@
 
     </script>
 
-    @*<mini-profiler />*@
+    <mini-profiler />
 </body>
 </html>
